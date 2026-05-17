@@ -2,6 +2,10 @@ const { jsPDF } = window.jspdf;
 
 function generatePDF() {
 
+    // =========================
+    // GET FORM VALUES
+    // =========================
+
     const customerName =
     document.getElementById("customerName").value;
 
@@ -31,73 +35,79 @@ function generatePDF() {
     'input[name="payment"]:checked'
     ).value;
 
-    // 4x6 THERMAL SIZE
+    // =========================
+    // PDF SIZE
+    // =========================
 
     const doc = new jsPDF({
         orientation: "portrait",
         unit: "mm",
-        format: [150,100]
+        format: [100,150]
     });
 
-    // BACKGROUND
+    // =========================
+    // PAGE
+    // =========================
 
     doc.setFillColor(255,255,255);
     doc.rect(0,0,100,150,"F");
 
+    doc.setDrawColor(0);
+    doc.setLineWidth(0.8);
+
     // OUTER BORDER
 
-    doc.setLineWidth(0.8);
-    doc.rect(3,3,94,144);
+    doc.rect(4,4,92,142);
 
     // =========================
-    // HEADER
+    // HEADER SECTION
     // =========================
 
     doc.setFont("helvetica","bold");
 
-    doc.setFontSize(30);
+    doc.setFontSize(22);
 
-    doc.text("VESPERA",8,18);
+    doc.text("VESPERA",8,15);
 
     doc.setFont("helvetica","normal");
 
-    doc.setFontSize(10);
+    doc.setFontSize(8);
 
     doc.text(
     "Chungathara, Nilambur",
     8,
-    28
+    22
     );
 
     doc.text(
     "Malappuram, Kerala - 679334",
     8,
-    35
+    27
     );
 
     doc.text(
     "+91 7025054109",
     8,
-    42
+    32
     );
 
-    // PAYMENT HEADER
+    // PAYMENT BOX
 
     doc.setFillColor(0,0,0);
 
     doc.roundedRect(
-    50,
+    52,
     8,
-    40,
-    10,
-    2,
-    2,
+    38,
+    8,
+    1,
+    1,
     "F"
     );
 
     doc.setTextColor(255,255,255);
 
-    doc.setFontSize(12);
+    doc.setFontSize(10);
 
     doc.setFont("helvetica","bold");
 
@@ -105,16 +115,16 @@ function generatePDF() {
 
         doc.text(
         "CASH ON DELIVERY",
-        54,
-        15
+        56,
+        13
         );
 
     }else{
 
         doc.text(
         "PREPAID ORDER",
-        58,
-        15
+        59,
+        13
         );
 
     }
@@ -124,49 +134,57 @@ function generatePDF() {
     doc.setTextColor(0,0,0);
 
     doc.roundedRect(
-    50,
-    22,
-    40,
+    52,
+    19,
+    38,
     18,
-    2,
-    2
+    1,
+    1
     );
 
-    doc.setFontSize(30);
+    doc.setFontSize(24);
+
+    doc.setFont("helvetica","bold");
 
     doc.text(
     `₹${orderValue}`,
-    58,
-    34
+    60,
+    31
     );
 
     // ORDER ID
 
-    doc.setFontSize(9);
+    doc.setFontSize(8);
 
     doc.setFont("helvetica","normal");
 
     doc.text(
     `ORDER ID : ${serial}`,
-    54,
-    46
+    56,
+    42
     );
 
     // DIVIDER
 
-    doc.line(3,50,97,50);
+    doc.line(4,46,96,46);
 
     // =========================
-    // FROM SELLER
+    // ADDRESS AREA
     // =========================
+
+    // LEFT
+
+    doc.line(50,46,50,102);
+
+    // FROM HEADER
 
     doc.setFillColor(0,0,0);
 
     doc.roundedRect(
-    6,
-    54,
-    30,
     8,
+    50,
+    28,
+    7,
     1,
     1,
     "F"
@@ -176,38 +194,40 @@ function generatePDF() {
 
     doc.setFont("helvetica","bold");
 
-    doc.setFontSize(11);
+    doc.setFontSize(9);
 
     doc.text(
     "FROM (SELLER)",
-    9,
-    59
+    11,
+    55
     );
+
+    // FROM CONTENT
 
     doc.setTextColor(0,0,0);
 
-    doc.setFontSize(18);
+    doc.setFontSize(16);
 
     doc.text(
     "VESPERA",
     8,
-    73
+    67
     );
 
     doc.setFont("helvetica","normal");
 
-    doc.setFontSize(10);
+    doc.setFontSize(8);
 
     doc.text(
     "Chungathara, Nilambur",
     8,
-    84
+    77
     );
 
     doc.text(
     "Malappuram, Kerala - 679334",
     8,
-    91
+    82
     );
 
     doc.setFont("helvetica","bold");
@@ -215,18 +235,14 @@ function generatePDF() {
     doc.text(
     "PIN: 679334",
     8,
-    102
+    91
     );
 
     doc.text(
     "PH: +91 7025054109",
     8,
-    110
+    98
     );
-
-    // CENTER DIVIDER
-
-    doc.line(50,52,50,112);
 
     // =========================
     // SHIP TO
@@ -236,9 +252,9 @@ function generatePDF() {
 
     doc.roundedRect(
     54,
-    54,
-    22,
-    8,
+    50,
+    20,
+    7,
     1,
     1,
     "F"
@@ -246,141 +262,159 @@ function generatePDF() {
 
     doc.setTextColor(255,255,255);
 
-    doc.setFont("helvetica","bold");
-
-    doc.setFontSize(11);
+    doc.setFontSize(9);
 
     doc.text(
     "SHIP TO",
     58,
-    59
+    55
     );
+
+    // CUSTOMER NAME
 
     doc.setTextColor(0,0,0);
 
-    doc.setFontSize(18);
+    doc.setFont("helvetica","bold");
+
+    doc.setFontSize(15);
+
+    const splitName =
+    doc.splitTextToSize(
+    customerName,
+    30
+    );
 
     doc.text(
-    customerName,
+    splitName,
     54,
-    73
+    67
     );
+
+    // ADDRESS
 
     doc.setFont("helvetica","normal");
 
-    doc.setFontSize(10);
+    doc.setFontSize(8);
 
     const splitAddress =
     doc.splitTextToSize(
     `${address}, ${district}`,
-    32
+    26
     );
 
     doc.text(
     splitAddress,
     54,
-    84
+    78
     );
+
+    // PIN + PHONE
 
     doc.setFont("helvetica","bold");
 
     doc.text(
     `PIN: ${pincode}`,
     54,
-    102
+    92
     );
 
     doc.text(
     `PH: ${phone}`,
     54,
-    110
+    99
     );
 
     // =========================
-    // PRODUCT TABLE
+    // PRODUCT SECTION
     // =========================
 
-    doc.line(3,118,97,118);
+    doc.line(4,106,96,106);
 
     doc.setFillColor(0,0,0);
 
-    doc.rect(3,118,94,10,"F");
+    doc.rect(
+    4,
+    106,
+    92,
+    9,
+    "F"
+    );
 
     doc.setTextColor(255,255,255);
+
+    doc.setFontSize(9);
+
+    doc.text(
+    "PRODUCT / ITEM",
+    8,
+    112
+    );
+
+    doc.text(
+    "QTY",
+    68,
+    112
+    );
+
+    doc.text(
+    "AMOUNT",
+    80,
+    112
+    );
+
+    // PRODUCT ROW
+
+    doc.setTextColor(0,0,0);
 
     doc.setFont("helvetica","bold");
 
     doc.setFontSize(11);
 
-    doc.text(
-    "PRODUCT / ITEM",
-    8,
-    125
-    );
-
-    doc.text(
-    "QTY",
-    70,
-    125
-    );
-
-    doc.text(
-    "AMOUNT",
-    82,
-    125
-    );
-
-    // PRODUCT DATA
-
-    doc.setTextColor(0,0,0);
-
-    doc.setFontSize(14);
-
-    doc.text(
+    const splitProduct =
+    doc.splitTextToSize(
     product,
+    40
+    );
+
+    doc.text(
+    splitProduct,
     8,
-    138
+    124
     );
 
     doc.text(
     "1",
-    73,
-    138
+    70,
+    124
     );
 
     doc.text(
     `₹${orderValue}`,
-    84,
-    138
+    80,
+    124
     );
 
-    // =========================
     // TOTAL SECTION
-    // =========================
 
-    doc.line(3,142,97,142);
+    doc.line(4,130,96,130);
 
-    doc.setFont("helvetica","bold");
-
-    doc.setFontSize(16);
+    doc.setFontSize(14);
 
     doc.text(
     "ORDER TOTAL",
     8,
-    154
+    140
     );
 
-    doc.setFontSize(28);
+    doc.setFontSize(24);
 
     doc.text(
     `₹${orderValue}`,
     72,
-    154
+    140
     );
 
-    // =========================
-    // SAVE
-    // =========================
+    // SAVE PDF
 
     doc.save(
     `shipping-label-${serial}.pdf`
