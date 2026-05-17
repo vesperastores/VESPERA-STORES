@@ -12,9 +12,9 @@ body{
 }
 
 .container{
-    max-width:700px;
+    max-width:520px;
     margin:auto;
-    padding:25px;
+    padding:12px;
 }
 
 .header{
@@ -24,27 +24,27 @@ body{
     #111111,
     #1b1b1b
     );
-    padding:35px;
-    border-radius:28px;
-    margin-bottom:28px;
+    padding:22px;
+    border-radius:18px;
+    margin-bottom:18px;
     border:1px solid rgba(200,169,107,0.25);
     box-shadow:
-    0 10px 35px rgba(0,0,0,0.4);
+    0 8px 25px rgba(0,0,0,0.35);
 }
 
 .header h1{
     color:#c8a96b;
-    font-size:52px;
+    font-size:34px;
     font-weight:700;
-    letter-spacing:4px;
+    letter-spacing:3px;
     text-transform:uppercase;
 }
 
 .header p{
     color:#8b8b8b;
-    letter-spacing:5px;
-    margin-top:5px;
-    font-size:14px;
+    letter-spacing:3px;
+    margin-top:4px;
+    font-size:12px;
 }
 
 .card{
@@ -54,12 +54,12 @@ body{
     #151515,
     #1c1c1c
     );
-    border-radius:28px;
+    border-radius:18px;
     overflow:hidden;
-    margin-bottom:28px;
+    margin-bottom:18px;
     border:1px solid rgba(200,169,107,0.12);
     box-shadow:
-    0 10px 30px rgba(0,0,0,0.35);
+    0 8px 22px rgba(0,0,0,0.3);
     color:white;
 }
 
@@ -71,73 +71,73 @@ body{
     #e0c28c
     );
     color:#111;
-    padding:22px;
+    padding:14px 18px;
     font-weight:700;
-    font-size:22px;
-    letter-spacing:2px;
+    font-size:16px;
+    letter-spacing:1px;
 }
 
 .upload-box{
-    padding:40px;
+    padding:18px;
 }
 
 .upload-box input{
     width:100%;
     background:#0f0f0f;
     border:2px dashed rgba(200,169,107,0.4);
-    border-radius:20px;
-    padding:35px;
+    border-radius:14px;
+    padding:18px;
     color:#999;
 }
 
 .seller-box{
-    margin:30px;
+    margin:18px;
     background:#111;
     border:1px solid rgba(200,169,107,0.15);
-    padding:28px;
-    border-radius:24px;
+    padding:18px;
+    border-radius:16px;
 }
 
 .seller-box h2{
     color:#c8a96b;
-    margin-bottom:18px;
-    font-size:32px;
+    margin-bottom:10px;
+    font-size:22px;
 }
 
 .seller-box p{
     color:#d1d1d1;
-    line-height:1.8;
-    font-size:16px;
+    line-height:1.6;
+    font-size:14px;
 }
 
 .form-group{
-    padding:20px 30px 10px;
+    padding:14px 18px 6px;
 }
 
 label{
     display:block;
-    margin-bottom:12px;
+    margin-bottom:8px;
     color:#c8a96b;
     font-weight:600;
-    letter-spacing:2px;
-    font-size:14px;
+    letter-spacing:1px;
+    font-size:12px;
 }
 
 input,
 textarea{
     width:100%;
-    padding:18px;
-    border-radius:20px;
+    padding:13px;
+    border-radius:14px;
     border:1px solid rgba(200,169,107,0.18);
     background:#101010;
     color:white;
-    font-size:17px;
+    font-size:15px;
     outline:none;
     transition:0.3s;
 }
 
 textarea{
-    min-height:140px;
+    min-height:90px;
     resize:none;
 }
 
@@ -150,12 +150,12 @@ input:focus,
 textarea:focus{
     border-color:#c8a96b;
     box-shadow:
-    0 0 18px rgba(200,169,107,0.12);
+    0 0 14px rgba(200,169,107,0.12);
 }
 
 .row{
     display:flex;
-    gap:20px;
+    gap:12px;
 }
 
 .row .form-group{
@@ -164,17 +164,17 @@ textarea:focus{
 
 .payment-options{
     display:flex;
-    gap:20px;
+    gap:12px;
 }
 
 .radio-box{
     flex:1;
     background:#111;
     border:1px solid rgba(200,169,107,0.15);
-    padding:22px;
-    border-radius:20px;
+    padding:14px;
+    border-radius:14px;
     text-align:center;
-    font-size:18px;
+    font-size:15px;
     cursor:pointer;
     transition:0.3s;
     color:#ddd;
@@ -186,15 +186,15 @@ textarea:focus{
 
 .radio-box input{
     width:auto;
-    margin-right:10px;
+    margin-right:8px;
 }
 
 button{
-    width:calc(100% - 60px);
-    margin:30px;
-    padding:22px;
+    width:calc(100% - 36px);
+    margin:18px;
+    padding:15px;
     border:none;
-    border-radius:22px;
+    border-radius:16px;
     background:
     linear-gradient(
     135deg,
@@ -202,7 +202,7 @@ button{
     #f1d39a
     );
     color:#111;
-    font-size:20px;
+    font-size:16px;
     font-weight:700;
     cursor:pointer;
     transition:0.3s;
@@ -212,13 +212,13 @@ button{
 button:hover{
     transform:translateY(-2px);
     box-shadow:
-    0 12px 25px rgba(200,169,107,0.2);
+    0 10px 20px rgba(200,169,107,0.2);
 }
 
-@media(max-width:700px){
+@media(max-width:600px){
 
     .container{
-        padding:15px;
+        padding:10px;
     }
 
     .row{
@@ -230,12 +230,12 @@ button:hover{
         flex-direction:column;
     }
 
-    .header h1{
-        font-size:38px;
+    .header{
+        padding:18px;
     }
 
-    .card-title{
-        font-size:18px;
+    .header h1{
+        font-size:28px;
     }
 
 }
