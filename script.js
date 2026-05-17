@@ -1,6 +1,6 @@
 const { jsPDF } = window.jspdf;
 
-function generatePDF(){
+function generatePDF() {
 
     const customerName =
     document.getElementById("customerName").value;
@@ -31,165 +31,359 @@ function generatePDF(){
     'input[name="payment"]:checked'
     ).value;
 
+    // 4x6 THERMAL SIZE
+
     const doc = new jsPDF({
-        orientation:"portrait",
-        unit:"in",
-        format:[4,6]
+        orientation: "portrait",
+        unit: "mm",
+        format: [150,100]
     });
 
     // BACKGROUND
 
     doc.setFillColor(255,255,255);
-    doc.rect(0,0,4,6,"F");
+    doc.rect(0,0,100,150,"F");
 
     // OUTER BORDER
 
-    doc.setDrawColor(0);
-    doc.setLineWidth(0.03);
-    doc.rect(0.08,0.08,3.84,5.84);
+    doc.setLineWidth(0.8);
+    doc.rect(3,3,94,144);
 
+    // =========================
     // HEADER
-
-    doc.setFillColor(20,20,20);
-    doc.rect(0.08,0.08,3.84,0.7,"F");
-
-    doc.setTextColor(200,169,107);
+    // =========================
 
     doc.setFont("helvetica","bold");
-    doc.setFontSize(22);
 
-    doc.text("VESPERA",1.05,0.5);
+    doc.setFontSize(30);
 
-    doc.setTextColor(255,255,255);
+    doc.text("VESPERA",8,18);
+
+    doc.setFont("helvetica","normal");
 
     doc.setFontSize(10);
 
-    doc.text("THERMAL SHIPPING LABEL",1.02,0.68);
+    doc.text(
+    "Chungathara, Nilambur",
+    8,
+    28
+    );
 
-    // PAYMENT BOX
+    doc.text(
+    "Malappuram, Kerala - 679334",
+    8,
+    35
+    );
+
+    doc.text(
+    "+91 7025054109",
+    8,
+    42
+    );
+
+    // PAYMENT HEADER
+
+    doc.setFillColor(0,0,0);
+
+    doc.roundedRect(
+    50,
+    8,
+    40,
+    10,
+    2,
+    2,
+    "F"
+    );
+
+    doc.setTextColor(255,255,255);
+
+    doc.setFontSize(12);
+
+    doc.setFont("helvetica","bold");
 
     if(payment === "COD"){
 
-        doc.setFillColor(0,0,0);
-
-        doc.rect(0.2,0.95,3.6,0.5,"F");
-
-        doc.setTextColor(255,255,255);
-
-        doc.setFontSize(22);
-
         doc.text(
-        `COD ₹${orderValue}`,
-        1.1,
-        1.28
+        "CASH ON DELIVERY",
+        54,
+        15
         );
 
     }else{
 
-        doc.setFillColor(30,30,30);
-
-        doc.rect(0.2,0.95,3.6,0.5,"F");
-
-        doc.setTextColor(255,255,255);
-
-        doc.setFontSize(20);
-
         doc.text(
-        `PREPAID`,
-        1.35,
-        1.28
+        "PREPAID ORDER",
+        58,
+        15
         );
 
     }
 
-    // SHIP TO SECTION
+    // AMOUNT BOX
 
     doc.setTextColor(0,0,0);
 
-    doc.setDrawColor(0);
+    doc.roundedRect(
+    50,
+    22,
+    40,
+    18,
+    2,
+    2
+    );
 
-    doc.rect(0.2,1.65,3.6,1.6);
+    doc.setFontSize(30);
 
-    doc.setFontSize(11);
+    doc.text(
+    `₹${orderValue}`,
+    58,
+    34
+    );
+
+    // ORDER ID
+
+    doc.setFontSize(9);
+
+    doc.setFont("helvetica","normal");
+
+    doc.text(
+    `ORDER ID : ${serial}`,
+    54,
+    46
+    );
+
+    // DIVIDER
+
+    doc.line(3,50,97,50);
+
+    // =========================
+    // FROM SELLER
+    // =========================
+
+    doc.setFillColor(0,0,0);
+
+    doc.roundedRect(
+    6,
+    54,
+    30,
+    8,
+    1,
+    1,
+    "F"
+    );
+
+    doc.setTextColor(255,255,255);
 
     doc.setFont("helvetica","bold");
 
-    doc.text("SHIP TO",0.32,1.88);
+    doc.setFontSize(11);
+
+    doc.text(
+    "FROM (SELLER)",
+    9,
+    59
+    );
+
+    doc.setTextColor(0,0,0);
 
     doc.setFontSize(18);
 
-    doc.text(customerName,0.32,2.2);
-
-    doc.setFontSize(13);
-
-    doc.text(phone,0.32,2.45);
+    doc.text(
+    "VESPERA",
+    8,
+    73
+    );
 
     doc.setFont("helvetica","normal");
 
-    doc.setFontSize(12);
+    doc.setFontSize(10);
 
-    const splitAddress =
-    doc.splitTextToSize(
-    `${address}, ${district} - ${pincode}`,
-    3.1
+    doc.text(
+    "Chungathara, Nilambur",
+    8,
+    84
     );
 
-    doc.text(splitAddress,0.32,2.75);
+    doc.text(
+    "Malappuram, Kerala - 679334",
+    8,
+    91
+    );
 
-    // ORDER DETAILS
+    doc.setFont("helvetica","bold");
 
-    doc.rect(0.2,3.45,3.6,1.0);
+    doc.text(
+    "PIN: 679334",
+    8,
+    102
+    );
+
+    doc.text(
+    "PH: +91 7025054109",
+    8,
+    110
+    );
+
+    // CENTER DIVIDER
+
+    doc.line(50,52,50,112);
+
+    // =========================
+    // SHIP TO
+    // =========================
+
+    doc.setFillColor(0,0,0);
+
+    doc.roundedRect(
+    54,
+    54,
+    22,
+    8,
+    1,
+    1,
+    "F"
+    );
+
+    doc.setTextColor(255,255,255);
 
     doc.setFont("helvetica","bold");
 
     doc.setFontSize(11);
 
-    doc.text("ORDER DETAILS",0.32,3.68);
+    doc.text(
+    "SHIP TO",
+    58,
+    59
+    );
+
+    doc.setTextColor(0,0,0);
+
+    doc.setFontSize(18);
+
+    doc.text(
+    customerName,
+    54,
+    73
+    );
 
     doc.setFont("helvetica","normal");
 
-    doc.setFontSize(12);
+    doc.setFontSize(10);
 
-    doc.text(
-    `Serial No : ${serial}`,
-    0.32,
-    3.98
+    const splitAddress =
+    doc.splitTextToSize(
+    `${address}, ${district}`,
+    32
     );
 
     doc.text(
-    `Product : ${product}`,
-    0.32,
-    4.25
+    splitAddress,
+    54,
+    84
     );
-
-    // BARCODE PLACEHOLDER
-
-    doc.rect(0.45,4.65,3.0,0.6);
 
     doc.setFont("helvetica","bold");
+
+    doc.text(
+    `PIN: ${pincode}`,
+    54,
+    102
+    );
+
+    doc.text(
+    `PH: ${phone}`,
+    54,
+    110
+    );
+
+    // =========================
+    // PRODUCT TABLE
+    // =========================
+
+    doc.line(3,118,97,118);
+
+    doc.setFillColor(0,0,0);
+
+    doc.rect(3,118,94,10,"F");
+
+    doc.setTextColor(255,255,255);
+
+    doc.setFont("helvetica","bold");
+
+    doc.setFontSize(11);
+
+    doc.text(
+    "PRODUCT / ITEM",
+    8,
+    125
+    );
+
+    doc.text(
+    "QTY",
+    70,
+    125
+    );
+
+    doc.text(
+    "AMOUNT",
+    82,
+    125
+    );
+
+    // PRODUCT DATA
+
+    doc.setTextColor(0,0,0);
 
     doc.setFontSize(14);
 
     doc.text(
-    "* SHIPPING BARCODE *",
-    0.78,
-    5.03
+    product,
+    8,
+    138
     );
-
-    // RETURN ADDRESS
-
-    doc.setFontSize(8);
-
-    doc.setFont("helvetica","normal");
 
     doc.text(
-    "RETURN: VESPERA, Chungathara, Nilambur, Kerala - 679334",
-    0.22,
-    5.55
+    "1",
+    73,
+    138
     );
 
-    // SAVE PDF
+    doc.text(
+    `₹${orderValue}`,
+    84,
+    138
+    );
 
-    doc.save("vespera-label.pdf");
+    // =========================
+    // TOTAL SECTION
+    // =========================
+
+    doc.line(3,142,97,142);
+
+    doc.setFont("helvetica","bold");
+
+    doc.setFontSize(16);
+
+    doc.text(
+    "ORDER TOTAL",
+    8,
+    154
+    );
+
+    doc.setFontSize(28);
+
+    doc.text(
+    `₹${orderValue}`,
+    72,
+    154
+    );
+
+    // =========================
+    // SAVE
+    // =========================
+
+    doc.save(
+    `shipping-label-${serial}.pdf`
+    );
 
 }
