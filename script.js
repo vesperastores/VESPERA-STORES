@@ -3,74 +3,71 @@ const { jsPDF } = window.jspdf;
 function generatePDF() {
 
     // =========================
-    // GET FORM VALUES
+    // GET VALUES
     // =========================
 
     const customerName =
-    document.getElementById("customerName").value;
+    document.getElementById("customerName").value || "Customer";
 
     const address =
-    document.getElementById("address").value;
+    document.getElementById("address").value || "-";
 
     const district =
-    document.getElementById("district").value;
+    document.getElementById("district").value || "-";
 
     const pincode =
-    document.getElementById("pincode").value;
+    document.getElementById("pincode").value || "-";
 
     const phone =
-    document.getElementById("phone").value;
+    document.getElementById("phone").value || "-";
 
     const serial =
-    document.getElementById("serial").value;
+    document.getElementById("serial").value || "VS001";
 
     const product =
-    document.getElementById("product").value;
+    document.getElementById("product").value || "Product";
 
     const orderValue =
-    document.getElementById("orderValue").value;
+    document.getElementById("orderValue").value || "0";
 
     const payment =
     document.querySelector(
     'input[name="payment"]:checked'
-    ).value;
+    )?.value || "COD";
 
     // =========================
-    // PDF SIZE
+    // CREATE PDF
     // =========================
 
     const doc = new jsPDF({
         orientation: "portrait",
         unit: "mm",
-        format: [100,150]
+        format: [100, 150]
     });
 
     // =========================
-    // PAGE
+    // PAGE BACKGROUND
     // =========================
 
     doc.setFillColor(255,255,255);
     doc.rect(0,0,100,150,"F");
 
-    doc.setDrawColor(0);
-    doc.setLineWidth(0.8);
-
     // OUTER BORDER
 
+    doc.setDrawColor(0);
+    doc.setLineWidth(0.7);
     doc.rect(4,4,92,142);
 
     // =========================
-    // HEADER SECTION
+    // HEADER
     // =========================
 
     doc.setFont("helvetica","bold");
-
-    doc.setFontSize(22);
+    doc.setFontSize(21);
 
     doc.text("VESPERA",8,15);
 
     doc.setFont("helvetica","normal");
-
     doc.setFontSize(8);
 
     doc.text(
@@ -91,7 +88,9 @@ function generatePDF() {
     32
     );
 
+    // =========================
     // PAYMENT BOX
+    // =========================
 
     doc.setFillColor(0,0,0);
 
@@ -107,9 +106,8 @@ function generatePDF() {
 
     doc.setTextColor(255,255,255);
 
-    doc.setFontSize(10);
-
     doc.setFont("helvetica","bold");
+    doc.setFontSize(9);
 
     if(payment === "COD"){
 
@@ -129,7 +127,9 @@ function generatePDF() {
 
     }
 
+    // =========================
     // AMOUNT BOX
+    // =========================
 
     doc.setTextColor(0,0,0);
 
@@ -142,21 +142,19 @@ function generatePDF() {
     1
     );
 
-    doc.setFontSize(24);
-
-    doc.setFont("helvetica","bold");
+    doc.setFont("helvetica","normal");
+    doc.setFontSize(20);
 
     doc.text(
-    `₹${orderValue}`,
-    60,
-    31
+    `INR ${orderValue}`,
+    87,
+    31,
+    { align: "right" }
     );
 
     // ORDER ID
 
     doc.setFontSize(8);
-
-    doc.setFont("helvetica","normal");
 
     doc.text(
     `ORDER ID : ${serial}`,
@@ -164,19 +162,19 @@ function generatePDF() {
     42
     );
 
+    // =========================
     // DIVIDER
+    // =========================
 
     doc.line(4,46,96,46);
 
-    // =========================
-    // ADDRESS AREA
-    // =========================
-
-    // LEFT
+    // CENTER DIVIDER
 
     doc.line(50,46,50,102);
 
+    // =========================
     // FROM HEADER
+    // =========================
 
     doc.setFillColor(0,0,0);
 
@@ -193,8 +191,7 @@ function generatePDF() {
     doc.setTextColor(255,255,255);
 
     doc.setFont("helvetica","bold");
-
-    doc.setFontSize(9);
+    doc.setFontSize(8);
 
     doc.text(
     "FROM (SELLER)",
@@ -202,11 +199,13 @@ function generatePDF() {
     55
     );
 
+    // =========================
     // FROM CONTENT
+    // =========================
 
     doc.setTextColor(0,0,0);
 
-    doc.setFontSize(16);
+    doc.setFontSize(15);
 
     doc.text(
     "VESPERA",
@@ -215,7 +214,6 @@ function generatePDF() {
     );
 
     doc.setFont("helvetica","normal");
-
     doc.setFontSize(8);
 
     doc.text(
@@ -245,7 +243,7 @@ function generatePDF() {
     );
 
     // =========================
-    // SHIP TO
+    // SHIP TO HEADER
     // =========================
 
     doc.setFillColor(0,0,0);
@@ -262,7 +260,8 @@ function generatePDF() {
 
     doc.setTextColor(255,255,255);
 
-    doc.setFontSize(9);
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(8);
 
     doc.text(
     "SHIP TO",
@@ -270,13 +269,13 @@ function generatePDF() {
     55
     );
 
-    // CUSTOMER NAME
+    // =========================
+    // CUSTOMER INFO
+    // =========================
 
     doc.setTextColor(0,0,0);
 
-    doc.setFont("helvetica","bold");
-
-    doc.setFontSize(15);
+    doc.setFontSize(13);
 
     const splitName =
     doc.splitTextToSize(
@@ -290,16 +289,13 @@ function generatePDF() {
     67
     );
 
-    // ADDRESS
-
     doc.setFont("helvetica","normal");
-
     doc.setFontSize(8);
 
     const splitAddress =
     doc.splitTextToSize(
     `${address}, ${district}`,
-    26
+    24
     );
 
     doc.text(
@@ -308,24 +304,22 @@ function generatePDF() {
     78
     );
 
-    // PIN + PHONE
-
     doc.setFont("helvetica","bold");
 
     doc.text(
     `PIN: ${pincode}`,
     54,
-    92
+    91
     );
 
     doc.text(
     `PH: ${phone}`,
     54,
-    99
+    98
     );
 
     // =========================
-    // PRODUCT SECTION
+    // PRODUCT TABLE
     // =========================
 
     doc.line(4,106,96,106);
@@ -342,7 +336,8 @@ function generatePDF() {
 
     doc.setTextColor(255,255,255);
 
-    doc.setFontSize(9);
+    doc.setFont("helvetica","bold");
+    doc.setFontSize(8);
 
     doc.text(
     "PRODUCT / ITEM",
@@ -362,18 +357,16 @@ function generatePDF() {
     112
     );
 
-    // PRODUCT ROW
+    // PRODUCT DATA
 
     doc.setTextColor(0,0,0);
 
-    doc.setFont("helvetica","bold");
-
-    doc.setFontSize(11);
+    doc.setFontSize(10);
 
     const splitProduct =
     doc.splitTextToSize(
     product,
-    40
+    42
     );
 
     doc.text(
@@ -389,16 +382,21 @@ function generatePDF() {
     );
 
     doc.text(
-    `₹${orderValue}`,
-    80,
-    124
+    `INR ${orderValue}`,
+    92,
+    124,
+    { align: "right" }
     );
 
-    // TOTAL SECTION
+    // =========================
+    // TOTAL
+    // =========================
 
     doc.line(4,130,96,130);
 
-    doc.setFontSize(14);
+    doc.setFont("helvetica","bold");
+
+    doc.setFontSize(13);
 
     doc.text(
     "ORDER TOTAL",
@@ -406,15 +404,20 @@ function generatePDF() {
     140
     );
 
-    doc.setFontSize(24);
+    doc.setFont("helvetica","normal");
+
+    doc.setFontSize(20);
 
     doc.text(
-    `₹${orderValue}`,
-    72,
-    140
+    `INR ${orderValue}`,
+    92,
+    140,
+    { align: "right" }
     );
 
-    // SAVE PDF
+    // =========================
+    // SAVE
+    // =========================
 
     doc.save(
     `shipping-label-${serial}.pdf`
