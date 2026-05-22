@@ -140,8 +140,10 @@ doc.text(
 doc.setFontSize(8);
 
 doc.text(
+[
 "Anapparabil House",
 "Arakkal,HMC Road"
+],
 8,
 77
 );
