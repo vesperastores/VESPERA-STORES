@@ -139,26 +139,26 @@ doc.text(
 doc.setFontSize(8);
 
 doc.text(
-"Anapparambil House",
-"Arakkal HMC Road"
+"Al Azhar College",
+"Madathilkandam"
 8,
 77
 );
 
 doc.text(
-"chalissery, Kerala - 679536",
+"perumpillichira, Kerala - 685605",
 8,
 83
 );
 
 doc.text(
-"PIN: 679334",
+"PIN: 685605",
 8,
 90
 );
 
 doc.text(
-"PH: +91 7025054109",
+"PH: +91 8281088967",
 8,
 96
 );
@@ -325,9 +325,9 @@ doc.setFontSize(7);
 doc.text(
 [
 "Sufiyan",
-"Anapparambil House",
-"chalissery-679536",
-"Arakkal HMC Road"
+"Al Azhar Arts&sports college",
+"perumpillichira-685605",
+"Madathilkandam"
 ],
 8,
 154
