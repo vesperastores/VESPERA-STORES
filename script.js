@@ -329,7 +329,7 @@ doc.text(
 [
 "SUFIYAN",
 "Anapparambil House",
-"Arakkal,HMC Road"
+"Arakkal,HMC Road",
 "Chalissery, Kerala - 679536"
 ],
 8,
