@@ -435,8 +435,7 @@ doc.text(
 "Name : Muhammed Sufiyan",
 "Mobile : 8281088967",
 "Address : Anapparambil House",
-"State : Kerala",
-"Pincode : 679536",
+"kerala,679536",
 "Area : Arakkal HMC Road",
 "City : Chalissery"
 ],
