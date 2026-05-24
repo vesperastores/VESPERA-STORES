@@ -9,7 +9,7 @@ format: [100,170]
 });
 
 
-// GET VALUES
+// INPUT VALUES
 
 const customer =
 document.getElementById("customerName").value || "Customer";
@@ -42,10 +42,11 @@ document.querySelector(
 
 
 
-// BORDER
+// OUTER BORDER
 
-doc.setLineWidth(.7);
+doc.setLineWidth(0.6);
 doc.rect(3,3,94,162);
+
 
 
 // HEADER
@@ -53,11 +54,7 @@ doc.rect(3,3,94,162);
 doc.setFont("helvetica","bold");
 doc.setFontSize(22);
 
-doc.text(
-"VESPERA",
-8,
-15
-);
+doc.text("VESPERA",8,15);
 
 doc.setFont("helvetica","normal");
 doc.setFontSize(8);
@@ -68,7 +65,8 @@ doc.text("Chalissery, Kerala - 679536",8,36);
 doc.text("+91 8281088967",8,42);
 
 
-// PAYMENT BOX
+
+// PAYMENT
 
 doc.setFillColor(0);
 
@@ -95,6 +93,7 @@ payment==="COD"
 56,
 13
 );
+
 
 
 // AMOUNT BOX
@@ -132,9 +131,6 @@ doc.text(
 42
 );
 
-
-// LINE
-
 doc.line(
 3,
 47,
@@ -143,7 +139,8 @@ doc.line(
 );
 
 
-// SELLER/CUSTOMER DIVIDER
+
+// SELLER / SHIP SECTION
 
 doc.line(
 50,
@@ -151,9 +148,6 @@ doc.line(
 50,
 105
 );
-
-
-// SELLER HEADER
 
 doc.setFillColor(0);
 
@@ -175,9 +169,6 @@ doc.text(
 57
 );
 
-
-// SHIP HEADER
-
 doc.roundedRect(
 55,
 52,
@@ -195,6 +186,7 @@ doc.text(
 );
 
 doc.setTextColor(0);
+
 
 
 // SELLER DETAILS
@@ -217,7 +209,7 @@ doc.setFont(
 "normal"
 );
 
-doc.setFontSize(8);
+doc.setFontSize(7);
 
 doc.text(
 [
@@ -243,8 +235,9 @@ doc.text(
 doc.text(
 "PH : +91 8281088967",
 8,
-102
+101
 );
+
 
 
 // CUSTOMER DETAILS
@@ -296,8 +289,9 @@ doc.text(
 doc.text(
 `PH : ${phone}`,
 53,
-103
+102
 );
+
 
 
 // PRODUCT HEADER
@@ -331,6 +325,7 @@ doc.text(
 80,
 116
 );
+
 
 
 // PRODUCT ROW
@@ -372,6 +367,7 @@ doc.line(
 );
 
 
+
 // TOTAL
 
 doc.setFont(
@@ -379,12 +375,12 @@ doc.setFont(
 "bold"
 );
 
-doc.setFontSize(14);
+doc.setFontSize(13);
 
 doc.text(
 "ORDER TOTAL",
 8,
-143
+142
 );
 
 doc.setFontSize(16);
@@ -392,7 +388,7 @@ doc.setFontSize(16);
 doc.text(
 `INR ${amount}`,
 92,
-143,
+142,
 {align:"right"}
 );
 
@@ -404,6 +400,7 @@ doc.line(
 );
 
 
+
 // RETURN + THANK YOU
 
 doc.line(
@@ -413,12 +410,17 @@ doc.line(
 160
 );
 
+doc.setFont(
+"helvetica",
+"bold"
+);
+
 doc.setFontSize(8);
 
 doc.text(
 "RETURN ADDRESS",
 8,
-152
+151
 );
 
 doc.setFont(
@@ -426,22 +428,23 @@ doc.setFont(
 "normal"
 );
 
-doc.setFontSize(5);
+doc.setFontSize(4.2);
 
 doc.text(
 [
-"Muhammed Sufiyan",
-"Mobile :8281088967",
-"Address :Anapparambil House",
+"Name : Muhammed Sufiyan",
+"Mobile : 8281088967",
+"Address : Anapparambil House",
 "State : Kerala",
 "Pincode : 679536",
 "Area : Arakkal HMC Road",
 "City : Chalissery"
 ],
 8,
-155,
+154,
 {
-maxWidth:38
+maxWidth:38,
+lineHeightFactor:0.85
 }
 );
 
@@ -458,7 +461,7 @@ doc.setFontSize(10);
 doc.text(
 "THANK YOU",
 62,
-152
+151
 );
 
 doc.setFont(
@@ -471,14 +474,15 @@ doc.setFontSize(6);
 doc.text(
 "We deliver happiness!",
 62,
-157
+156
 );
 
 doc.text(
 "www.vespera.in",
 62,
-161
+160
 );
+
 
 
 // FOOTER
