@@ -1,15 +1,15 @@
 const { jsPDF } = window.jspdf;
 
-function generatePDF(){
+function generatePDF() {
 
 const doc = new jsPDF({
-orientation:"portrait",
-unit:"mm",
-format:[100,170]
+orientation: "portrait",
+unit: "mm",
+format: [100,170]
 });
 
 
-// GET FORM VALUES
+// GET VALUES
 
 const customer =
 document.getElementById("customerName").value || "Customer";
@@ -42,11 +42,10 @@ document.querySelector(
 
 
 
-// OUTER BORDER
+// BORDER
 
 doc.setLineWidth(.7);
 doc.rect(3,3,94,162);
-
 
 
 // HEADER
@@ -63,33 +62,13 @@ doc.text(
 doc.setFont("helvetica","normal");
 doc.setFontSize(8);
 
-doc.text(
-"Anapparambil House",
-8,
-24
-);
-
-doc.text(
-"Arakkal HMC Road",
-8,
-30
-);
-
-doc.text(
-"Chalissery, Kerala - 679536",
-8,
-36
-);
-
-doc.text(
-"+91 8281088967",
-8,
-42
-);
+doc.text("Anapparambil House",8,24);
+doc.text("Arakkal HMC Road",8,30);
+doc.text("Chalissery, Kerala - 679536",8,36);
+doc.text("+91 8281088967",8,42);
 
 
-
-// PAYMENT
+// PAYMENT BOX
 
 doc.setFillColor(0);
 
@@ -118,7 +97,6 @@ payment==="COD"
 );
 
 
-
 // AMOUNT BOX
 
 doc.setTextColor(0);
@@ -137,11 +115,11 @@ doc.setFont(
 "bold"
 );
 
-doc.setFontSize(22);
+doc.setFontSize(16);
 
 doc.text(
-`₹ ${amount}`,
-87,
+`INR ${amount}`,
+85,
 30,
 {align:"right"}
 );
@@ -155,6 +133,7 @@ doc.text(
 );
 
 
+// LINE
 
 doc.line(
 3,
@@ -164,8 +143,7 @@ doc.line(
 );
 
 
-
-// MIDDLE SECTION
+// SELLER/CUSTOMER DIVIDER
 
 doc.line(
 50,
@@ -175,7 +153,7 @@ doc.line(
 );
 
 
-// SELLER TITLE
+// SELLER HEADER
 
 doc.setFillColor(0);
 
@@ -198,7 +176,7 @@ doc.text(
 );
 
 
-// SHIP TITLE
+// SHIP HEADER
 
 doc.roundedRect(
 55,
@@ -219,8 +197,7 @@ doc.text(
 doc.setTextColor(0);
 
 
-
-// SELLER CONTENT
+// SELLER DETAILS
 
 doc.setFont(
 "helvetica",
@@ -270,12 +247,11 @@ doc.text(
 );
 
 
-
-// CUSTOMER
+// CUSTOMER DETAILS
 
 doc.setFontSize(12);
 
-let cname=
+let cname =
 doc.splitTextToSize(
 customer,
 35
@@ -294,7 +270,7 @@ doc.setFont(
 
 doc.setFontSize(8);
 
-let caddress=
+let caddress =
 doc.splitTextToSize(
 `${address}, ${district}`,
 35
@@ -322,7 +298,6 @@ doc.text(
 53,
 103
 );
-
 
 
 // PRODUCT HEADER
@@ -358,21 +333,20 @@ doc.text(
 );
 
 
-
-// PRODUCT
+// PRODUCT ROW
 
 doc.setTextColor(0);
 
 doc.setFontSize(10);
 
-let p=
+let prod =
 doc.splitTextToSize(
 product,
 40
 );
 
 doc.text(
-p,
+prod,
 8,
 128
 );
@@ -384,7 +358,7 @@ doc.text(
 );
 
 doc.text(
-`₹${amount}`,
+`INR ${amount}`,
 92,
 128,
 {align:"right"}
@@ -398,8 +372,12 @@ doc.line(
 );
 
 
-
 // TOTAL
+
+doc.setFont(
+"helvetica",
+"bold"
+);
 
 doc.setFontSize(14);
 
@@ -409,10 +387,10 @@ doc.text(
 143
 );
 
-doc.setFontSize(22);
+doc.setFontSize(16);
 
 doc.text(
-`₹${amount}`,
+`INR ${amount}`,
 92,
 143,
 {align:"right"}
@@ -426,7 +404,6 @@ doc.line(
 );
 
 
-
 // RETURN + THANK YOU
 
 doc.line(
@@ -434,11 +411,6 @@ doc.line(
 147,
 50,
 160
-);
-
-doc.setFont(
-"helvetica",
-"bold"
 );
 
 doc.setFontSize(8);
@@ -454,22 +426,27 @@ doc.setFont(
 "normal"
 );
 
-doc.setFontSize(6);
+doc.setFontSize(5);
 
 doc.text(
 [
-"Name : Muhammed Sufiyan",
-"Mobile : 8281088967",
-"",
-"Address : Anapparambil House",
+"Muhammed Sufiyan",
+"Mobile :8281088967",
+"Address :Anapparambil House",
 "State : Kerala",
 "Pincode : 679536",
 "Area : Arakkal HMC Road",
 "City : Chalissery"
 ],
 8,
-156
+155,
+{
+maxWidth:38
+}
 );
+
+
+// THANK YOU
 
 doc.setFont(
 "helvetica",
@@ -489,7 +466,7 @@ doc.setFont(
 "normal"
 );
 
-doc.setFontSize(7);
+doc.setFontSize(6);
 
 doc.text(
 "We deliver happiness!",
@@ -500,9 +477,8 @@ doc.text(
 doc.text(
 "www.vespera.in",
 62,
-162
+161
 );
-
 
 
 // FOOTER
