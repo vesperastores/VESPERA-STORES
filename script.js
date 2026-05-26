@@ -212,42 +212,29 @@ doc.text(
 
 
 // BUYER SECTION
-function drawBuyerDetails(doc, order, x, y) {
+doc.setFont("helvetica", "bold");
+doc.setFontSize(13);
 
-    const cx = x + 10;
-    const startY = y + 15;
+doc.text(customer, 53, 68);
 
-    const labelWidth = 80;
-    const lineHeight = 4;
+doc.setFont("helvetica", "normal");
+doc.setFontSize(7);
 
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.text(order.customer || "-", cx, startY);
+// address
+let buyerLines = doc.splitTextToSize(address, 28);
+doc.text(buyerLines, 53, 82);
 
-    let cy = startY + 8;
+// move cursor properly
+let y = 82 + (buyerLines.length * 4) + 4;
 
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(7);
+doc.setFont("helvetica", "bold");
 
-    let addressLines = doc.splitTextToSize(order.address || "-", labelWidth);
+doc.text(`PIN : ${pin}`, 53, y);
 
-    const maxAddressLines = 5;
-    addressLines = addressLines.slice(0, maxAddressLines);
+// move next line properly
+y += 5;
 
-    doc.text(addressLines, cx, cy);
-
-    cy += addressLines.length * lineHeight;
-
-    const pinY = doc.internal.pageSize.height - 30;
-    const phoneY = doc.internal.pageSize.height - 22;
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
-
-    doc.text(`PIN : ${order.pin || "-"}`, cx, pinY);
-    doc.text(`PH  : ${order.phone || "-"}`, cx, phoneY);
-}
-
+doc.text(`PH : ${phone}`, 53, y);
 // PRODUCT HEADER
 
 doc.setFillColor(0);
