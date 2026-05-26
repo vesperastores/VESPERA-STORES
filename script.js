@@ -1,13 +1,12 @@
 const { jsPDF } = window.jspdf;
 
-function generatePDF(){
+function generatePDF() {
 
 const doc = new jsPDF({
 orientation:"portrait",
 unit:"mm",
 format:[100,170]
 });
-
 
 // INPUTS
 const customer=document.getElementById("customerName").value || "Customer";
@@ -24,16 +23,13 @@ const payment=document.querySelector(
 
 
 // NUMBER TO WORDS
-
 function amountWords(n){
 
-const ones=["","one","two","three","four","five","six","seven","eight","nine"];
-
-const teens=["ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
-
-const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
-
 n=parseInt(n);
+
+const ones=["","one","two","three","four","five","six","seven","eight","nine"];
+const teens=["ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
 
 if(n<10) return ones[n];
 
@@ -45,7 +41,7 @@ return tens[Math.floor(n/10)]+" "+ones[n%10];
 
 if(n<1000){
 return ones[Math.floor(n/100)]+" hundred "+
-(n%100?amountWords(n%100):"");
+(n%100 ? amountWords(n%100) : "");
 }
 
 return n.toString();
@@ -55,59 +51,38 @@ return n.toString();
 let words=amountWords(amount);
 
 
-// OUTER BORDER
-
-doc.setLineWidth(.7);
-
-doc.rect(
-3,
-3,
-94,
-162
-);
+// BORDER
+doc.setLineWidth(0.7);
+doc.rect(3,3,94,162);
 
 
 // PAYMENT BOX
-
 doc.setFillColor(0);
 
 doc.roundedRect(
-55,
-8,
-37,
-8,
-1,
-1,
-"F"
+55,8,37,8,1,1,"F"
 );
 
-doc.setTextColor(255,255,255);
+doc.setTextColor(255);
 
-doc.setFont(
-"helvetica",
-"bold"
-);
-
+doc.setFont("helvetica","bold");
 doc.setFontSize(8);
 
 doc.text(
 payment==="COD"
-?
-"CASH ON DELIVERY"
-:
-"PREPAID",
+?"CASH ON DELIVERY"
+:"PREPAID",
 73,
 13,
-{
-align:"center"
-}
+{align:"center"}
 );
 
 
-// AMOUNT BOX
+// RESET TEXT
+doc.setTextColor(0);
 
-doc.setTextColor(0,0,0);
 
+// PRICE BOX
 doc.roundedRect(
 55,
 18,
@@ -123,9 +98,7 @@ doc.text(
 `INR ${amount}`,
 73,
 28,
-{
-align:"center"
-}
+{align:"center"}
 );
 
 doc.setFontSize(4);
@@ -134,9 +107,7 @@ doc.text(
 words,
 73,
 33,
-{
-align:"center"
-}
+{align:"center"}
 );
 
 
@@ -148,9 +119,7 @@ doc.text(
 `ORDER ID : ${serial}`,
 73,
 40,
-{
-align:"center"
-}
+{align:"center"}
 );
 
 doc.line(
@@ -161,7 +130,7 @@ doc.line(
 );
 
 
-// MIDDLE LINE
+// CENTER LINE
 
 doc.line(
 50,
@@ -171,7 +140,7 @@ doc.line(
 );
 
 
-// FROM LABEL
+// FROM BOX
 
 doc.setFillColor(0);
 
@@ -187,19 +156,15 @@ doc.roundedRect(
 
 doc.setTextColor(255);
 
-doc.setFontSize(7);
-
 doc.text(
 "FROM (SELLER)",
 22,
 55,
-{
-align:"center"
-}
+{align:"center"}
 );
 
 
-// TO LABEL
+// TO BOX (FIXED)
 
 doc.roundedRect(
 53,
@@ -215,20 +180,17 @@ doc.text(
 "TO (BUYER)",
 67,
 55,
-{
-align:"center"
-}
+{align:"center"}
 );
 
+
+// RESET TO BLACK
 doc.setTextColor(0);
 
 
 // SELLER DETAILS
 
-doc.setFont(
-"helvetica",
-"bold"
-);
+doc.setFont("helvetica","bold");
 
 doc.setFontSize(12);
 
@@ -238,10 +200,7 @@ doc.text(
 68
 );
 
-doc.setFont(
-"helvetica",
-"normal"
-);
+doc.setFont("helvetica","normal");
 
 doc.setFontSize(6);
 
@@ -255,10 +214,7 @@ doc.text(
 77
 );
 
-doc.setFont(
-"helvetica",
-"bold"
-);
+doc.setFont("helvetica","bold");
 
 doc.text(
 "PIN : 679536",
@@ -289,10 +245,7 @@ customer,
 68
 );
 
-doc.setFont(
-"helvetica",
-"normal"
-);
+doc.setFont("helvetica","normal");
 
 doc.setFontSize(6);
 
@@ -308,10 +261,7 @@ buyerAddress,
 80
 );
 
-doc.setFont(
-"helvetica",
-"bold"
-);
+doc.setFont("helvetica","bold");
 
 doc.text(
 `PIN : ${pin}`,
@@ -340,8 +290,6 @@ doc.rect(
 
 doc.setTextColor(255);
 
-doc.setFontSize(7);
-
 doc.text(
 "PRODUCT / ITEM",
 8,
@@ -360,10 +308,10 @@ doc.text(
 111
 );
 
+doc.setTextColor(0);
+
 
 // PRODUCT ROW
-
-doc.setTextColor(0);
 
 doc.setFontSize(10);
 
@@ -383,9 +331,7 @@ doc.text(
 `INR ${amount}`,
 95,
 124,
-{
-align:"right"
-}
+{align:"right"}
 );
 
 doc.line(
@@ -412,9 +358,7 @@ doc.text(
 `INR ${amount}`,
 95,
 140,
-{
-align:"right"
-}
+{align:"right"}
 );
 
 doc.line(
@@ -448,10 +392,7 @@ doc.text(
 149
 );
 
-doc.setFont(
-"helvetica",
-"normal"
-);
+doc.setFont("helvetica","normal");
 
 doc.setFontSize(4.5);
 
