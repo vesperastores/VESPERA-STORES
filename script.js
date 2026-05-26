@@ -1,6 +1,6 @@
 const { jsPDF } = window.jspdf;
 
-function generatePDF(){
+function generatePDF() {
 
 const doc = new jsPDF({
 orientation:"portrait",
@@ -8,180 +8,145 @@ unit:"mm",
 format:[100,170]
 });
 
-
-// INPUT VALUES
-
+// INPUTS
 const customer=document.getElementById("customerName").value||"Customer";
-
 const address=document.getElementById("address").value||"-";
-
 const district=document.getElementById("district").value||"-";
-
 const pin=document.getElementById("pincode").value||"-";
-
 const phone=document.getElementById("phone").value||"-";
-
 const product=document.getElementById("product").value||"Product";
-
 const amount=document.getElementById("orderValue").value||"0";
-
 const serial=document.getElementById("serial").value||"DS1";
 
-const payment=
-document.querySelector(
+const payment=document.querySelector(
 'input[name="payment"]:checked'
 )?.value || "COD";
 
 
+// AMOUNT WORDS
+function amountWords(n){
 
-// OUTER BORDER
+const ones=["","one","two","three","four","five","six","seven","eight","nine"];
 
+const teens=["ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+
+const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+
+n=parseInt(n);
+
+if(n<10) return ones[n];
+
+if(n<20) return teens[n-10];
+
+if(n<100)
+return tens[Math.floor(n/10)]+" "+ones[n%10];
+
+if(n<1000)
+return ones[Math.floor(n/100)]+" hundred "+
+(
+n%100?amountWords(n%100):""
+);
+
+return n;
+}
+
+let words=amountWords(amount);
+
+
+// BORDER
 doc.setLineWidth(.7);
 doc.rect(3,3,94,162);
 
 
 // PAYMENT BOX
-
 doc.setFillColor(0);
-
-doc.roundedRect(
-52,
-8,
-40,
-8,
-1,
-1,
-"F"
-);
+doc.roundedRect(55,8,37,8,1,1,"F");
 
 doc.setTextColor(255);
-
-doc.setFont(
-"helvetica",
-"bold"
-);
-
 doc.setFontSize(8);
 
 doc.text(
-"CASH ON DELIVERY",
-58,
+payment==="COD"
+?"CASH ON DELIVERY"
+:"PREPAID",
+60,
 13
 );
 
 
-// AMOUNT BOX
-
+// PRICE BOX
 doc.setTextColor(0);
 
-doc.roundedRect(
-52,
-18,
-40,
-18,
-1,
-1
-);
+doc.roundedRect(55,18,37,18,1,1);
 
-doc.setFontSize(13);
+doc.setFontSize(14);
+
+doc.setFont("helvetica","bold");
 
 doc.text(
 `INR ${amount}`,
-72,
+73,
 28,
 {align:"center"}
 );
 
-
-doc.setFontSize(5);
+doc.setFontSize(4);
 
 doc.text(
-"three hundred ninety nine",
-72,
+words,
+73,
 33,
 {align:"center"}
 );
 
 
+// ORDER ID
 doc.setFontSize(8);
 
 doc.text(
 `ORDER ID : ${serial}`,
-63,
+60,
 40
 );
 
-
-doc.line(
-3,
-45,
-97,
-45
-);
+doc.line(3,45,97,45);
 
 
-// MIDDLE DIVISION
-
-doc.line(
-50,
-45,
-50,
-100
-);
+// CENTER SECTION
+doc.line(50,45,50,100);
 
 
-// SECTION TITLES
-
+// FROM LABEL
 doc.setFillColor(0);
 
-doc.roundedRect(
-8,
-50,
-24,
-6,
-1,
-1,
-"F"
-);
-
-doc.roundedRect(
-53,
-50,
-20,
-6,
-1,
-1,
-"F"
-);
+doc.roundedRect(8,50,28,7,1,1,"F");
 
 doc.setTextColor(255);
-
-doc.setFontSize(7);
 
 doc.text(
 "FROM (SELLER)",
 11,
-54
+55
 );
+
+
+// TO LABEL
+doc.roundedRect(53,50,20,7,1,1,"F");
 
 doc.text(
 "TO (BUYER)",
 57,
-54
+55
 );
-
 
 doc.setTextColor(0);
 
 
-// FROM SELLER
+// FROM DETAILS
 
-doc.setFont(
-"helvetica",
-"bold"
-);
+doc.setFontSize(12);
 
-doc.setFontSize(11);
+doc.setFont("helvetica","bold");
 
 doc.text(
 "SUFIYAN",
@@ -189,13 +154,9 @@ doc.text(
 68
 );
 
+doc.setFontSize(7);
 
-doc.setFont(
-"helvetica",
-"normal"
-);
-
-doc.setFontSize(6);
+doc.setFont("helvetica","normal");
 
 doc.text(
 [
@@ -204,90 +165,70 @@ doc.text(
 "Chalissery, Kerala - 679536"
 ],
 8,
-78
+77
 );
 
-
-doc.setFont(
-"helvetica",
-"bold"
-);
+doc.setFont("helvetica","bold");
 
 doc.text(
 "PIN : 679536",
 8,
-92
+91
 );
 
 doc.text(
 "PH : +91 8281088967",
 8,
-98
+97
 );
 
 doc.text(
 "Customer id : 1265200969",
 8,
-104
+103
 );
 
 
-// TO BUYER
+// BUYER DETAILS
 
 doc.setFontSize(11);
 
-let buyerName=
-doc.splitTextToSize(
-customer,
-22
-);
-
 doc.text(
-buyerName,
+customer,
 53,
 68
 );
 
-
-doc.setFont(
-"helvetica",
-"normal"
-);
+doc.setFont("helvetica","normal");
 
 doc.setFontSize(6);
 
+// FIXED ADDRESS (NO DUPLICATE DISTRICT)
 
 let buyerAddress=
 doc.splitTextToSize(
-`${address}
-Area : ${district}
-City : malappuram`,
-22
+address,
+28
 );
-
 
 doc.text(
 buyerAddress,
 53,
-82
+80
 );
 
-
-doc.setFont(
-"helvetica",
-"bold"
-);
+doc.setFont("helvetica","bold");
 
 doc.text(
 `PIN : ${pin}`,
 53,
-98
+93
 );
 
 doc.text(
 `PH : ${phone}`,
 53,
-104
+99
 );
 
 
@@ -297,7 +238,7 @@ doc.setFillColor(0);
 
 doc.rect(
 3,
-110,
+106,
 94,
 8,
 "F"
@@ -305,85 +246,78 @@ doc.rect(
 
 doc.setTextColor(255);
 
-doc.setFontSize(7);
-
 doc.text(
 "PRODUCT / ITEM",
 8,
-115
+111
 );
 
 doc.text(
 "QTY",
-68,
-115
+70,
+111
 );
 
 doc.text(
 "AMOUNT",
 82,
-115
+111
 );
 
 
+// PRODUCT ROW
+
 doc.setTextColor(0);
-
-
-// PRODUCT
-
-doc.setFontSize(9);
 
 doc.text(
 product.toUpperCase(),
 8,
-128
+124
 );
 
 doc.text(
 "1",
-70,
-128
+72,
+124
 );
 
 doc.text(
 `INR ${amount}`,
-82,
-128
+85,
+124
 );
-
 
 doc.line(
 8,
-132,
+128,
 92,
-132
+128
 );
 
 
 // TOTAL
 
-doc.setFontSize(11);
+doc.setFontSize(12);
 
 doc.text(
 "ORDER TOTAL",
 8,
-145
+140
 );
 
-doc.setFontSize(13);
+doc.setFontSize(16);
 
 doc.text(
 `INR ${amount}`,
 82,
-145
+140
 );
-
 
 doc.line(
 3,
-150,
+144,
 97,
-150
+144
 );
 
 
@@ -391,22 +325,28 @@ doc.line(
 
 doc.line(
 50,
-150,
+144,
 50,
-161
+160
 );
 
-
-doc.setFontSize(7);
+doc.setFontSize(8);
 
 doc.text(
 "RETURN ADDRESS",
 8,
-155
+149
 );
 
+doc.text(
+"THANK YOU",
+63,
+149
+);
 
 doc.setFontSize(5);
+
+doc.setFont("helvetica","normal");
 
 doc.text(
 [
@@ -419,31 +359,19 @@ doc.text(
 "City : Chalissery"
 ],
 8,
-159
+153
 );
-
-
-doc.setFontSize(8);
-
-doc.text(
-"THANK YOU",
-63,
-155
-);
-
-
-doc.setFontSize(6);
 
 doc.text(
 "We deliver happiness!",
 63,
-160
+155
 );
 
 doc.text(
 "www.vespera.in",
 63,
-165
+160
 );
 
 
@@ -458,9 +386,6 @@ doc.rect(
 4,
 "F"
 );
-
-
-// SAVE PDF
 
 doc.save(
 `shipping-label-${serial}.pdf`
