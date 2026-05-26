@@ -8,7 +8,9 @@ unit:"mm",
 format:[100,170]
 });
 
+
 // INPUTS
+
 const customer=document.getElementById("customerName").value || "Customer";
 const address=document.getElementById("address").value || "-";
 const pin=document.getElementById("pincode").value || "-";
@@ -22,7 +24,7 @@ const payment=document.querySelector(
 )?.value || "COD";
 
 
-// NUMBER → WORDS
+// NUMBER TO WORDS
 
 function amountWords(n){
 
@@ -37,12 +39,16 @@ if(n<10) return ones[n];
 if(n<20) return teens[n-10];
 
 if(n<100){
+
 return tens[Math.floor(n/10)]+" "+ones[n%10];
+
 }
 
 if(n<1000){
+
 return ones[Math.floor(n/100)]+" hundred " +
 (n%100 ? amountWords(n%100) : "");
+
 }
 
 return n.toString();
@@ -52,10 +58,16 @@ return n.toString();
 let words=amountWords(amount);
 
 
-// OUTER BORDER
+// BORDER
 
 doc.setLineWidth(.7);
-doc.rect(3,3,94,162);
+
+doc.rect(
+3,
+3,
+94,
+162
+);
 
 
 // PAYMENT BOX
@@ -75,6 +87,7 @@ doc.roundedRect(
 doc.setTextColor(255);
 
 doc.setFont("helvetica","bold");
+
 doc.setFontSize(8);
 
 doc.text(
@@ -176,8 +189,6 @@ doc.text(
 
 // TO LABEL (FIXED)
 
-doc.setFillColor(0);
-
 doc.roundedRect(
 53,
 50,
@@ -188,15 +199,11 @@ doc.roundedRect(
 "F"
 );
 
-doc.setFont("helvetica","bold");
-doc.setFontSize(7);
-
-doc.setTextColor(255);
-
 doc.text(
 "TO (BUYER)",
 67,
-54.8
+55,
+{align:"center"}
 );
 
 doc.setTextColor(0);
@@ -204,7 +211,11 @@ doc.setTextColor(0);
 
 // SELLER DETAILS
 
-doc.setFont("helvetica","bold");
+doc.setFont(
+"helvetica",
+"bold"
+);
+
 doc.setFontSize(12);
 
 doc.text(
@@ -213,7 +224,11 @@ doc.text(
 68
 );
 
-doc.setFont("helvetica","normal");
+doc.setFont(
+"helvetica",
+"normal"
+);
+
 doc.setFontSize(6);
 
 doc.text(
@@ -226,7 +241,10 @@ doc.text(
 77
 );
 
-doc.setFont("helvetica","bold");
+doc.setFont(
+"helvetica",
+"bold"
+);
 
 doc.text(
 "PIN : 679536",
@@ -257,7 +275,11 @@ customer,
 68
 );
 
-doc.setFont("helvetica","normal");
+doc.setFont(
+"helvetica",
+"normal"
+);
+
 doc.setFontSize(6);
 
 let buyerAddress=
@@ -304,6 +326,8 @@ doc.rect(
 
 doc.setTextColor(255);
 
+doc.setFontSize(7);
+
 doc.text(
 "PRODUCT / ITEM",
 8,
@@ -318,7 +342,7 @@ doc.text(
 
 doc.text(
 "AMOUNT",
-85,
+86,
 111
 );
 
@@ -356,7 +380,7 @@ doc.line(
 );
 
 
-// TOTAL
+// ORDER TOTAL
 
 doc.setFontSize(13);
 
@@ -383,7 +407,7 @@ doc.line(
 );
 
 
-// RETURN + THANK YOU
+// RETURN SECTION
 
 doc.line(
 50,
@@ -408,7 +432,10 @@ doc.text(
 
 doc.setFontSize(4.5);
 
-doc.setFont("helvetica","normal");
+doc.setFont(
+"helvetica",
+"normal"
+);
 
 doc.text(
 [
