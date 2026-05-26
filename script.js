@@ -1,109 +1,89 @@
 const { jsPDF } = window.jspdf;
 
-function generatePDF() {
+function numberToWords(num){
+const ones=["","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
 
-const doc = new jsPDF({
-orientation: "portrait",
-unit: "mm",
-format: [100,170]
+if(num<20) return ones[num];
+
+if(num<100){
+return tens[Math.floor(num/10)]+" "+ones[num%10];
+}
+
+if(num<1000){
+return ones[Math.floor(num/100)]+" hundred "+numberToWords(num%100);
+}
+
+return num;
+}
+
+function generatePDF(){
+
+const doc=new jsPDF({
+orientation:"portrait",
+unit:"mm",
+format:[100,170]
 });
-
 
 // INPUT VALUES
 
-const customer =
-document.getElementById("customerName").value || "Customer";
+const customer=document.getElementById("customerName").value || "Customer";
 
-const address =
-document.getElementById("address").value || "-";
+const address=document.getElementById("address").value || "-";
 
-const district =
-document.getElementById("district").value || "-";
+const district=document.getElementById("district").value || "-";
 
-const pin =
-document.getElementById("pincode").value || "-";
+const pin=document.getElementById("pincode").value || "-";
 
-const phone =
-document.getElementById("phone").value || "-";
+const phone=document.getElementById("phone").value || "-";
 
-const product =
-document.getElementById("product").value || "Product";
+const product=document.getElementById("product").value || "Product";
 
-const amount =
-document.getElementById("orderValue").value || "0";
+const amount=document.getElementById("orderValue").value || "0";
 
-const serial =
-document.getElementById("serial").value || "VS001";
+const serial=document.getElementById("serial").value || "DS1";
 
-const payment =
+const payment=
 document.querySelector(
 'input[name="payment"]:checked'
 )?.value || "COD";
 
+const amountWords=numberToWords(parseInt(amount));
 
 
-// OUTER BORDER
+// BORDER
 
-doc.setLineWidth(0.6);
+doc.setLineWidth(.6);
 doc.rect(3,3,94,162);
 
 
+// PAYMENT BOX
 
-// HEADER
+doc.setFillColor(0,0,0);
 
-doc.setFont("helvetica","bold");
-doc.setFontSize(22);
-
-doc.text("VESPERA",8,15);
-
-doc.setFont("helvetica","normal");
-doc.setFontSize(8);
-
-doc.text("Anapparambil House",8,24);
-doc.text("Arakkal HMC Road",8,30);
-doc.text("Chalissery, Kerala - 679536",8,36);
-doc.text("+91 8281088967",8,42);
-
-
-
-// PAYMENT
-
-doc.setFillColor(0);
-
-doc.roundedRect(
-52,
-8,
-38,
-8,
-1,
-1,
-"F"
-);
+doc.roundedRect(52,8,40,8,1,1,"F");
 
 doc.setTextColor(255);
 
 doc.setFontSize(8);
 
 doc.text(
-payment==="COD"
-?
-"CASH ON DELIVERY"
-:
-"PREPAID",
-56,
+payment==="COD" ?
+"CASH ON DELIVERY" :
+"PREPAID ORDER",
+57,
 13
 );
 
 
-
-// AMOUNT BOX
+// PRICE BOX
 
 doc.setTextColor(0);
 
 doc.roundedRect(
 52,
 18,
-38,
+40,
 18,
 1,
 1
@@ -114,82 +94,68 @@ doc.setFont(
 "bold"
 );
 
-doc.setFontSize(16);
+doc.setFontSize(14);
 
 doc.text(
 `INR ${amount}`,
-85,
-30,
-{align:"right"}
+72,
+28,
+{align:"center"}
 );
+
+doc.setFontSize(5);
+
+doc.text(
+amountWords,
+72,
+34,
+{align:"center"}
+);
+
+
+// ORDER ID
 
 doc.setFontSize(8);
 
 doc.text(
 `ORDER ID : ${serial}`,
 58,
-42
+40
 );
 
-doc.line(
-3,
-47,
-97,
-47
-);
+doc.line(3,45,97,45);
 
 
+// SELLER / BUYER
 
-// SELLER / SHIP SECTION
-
-doc.line(
-50,
-47,
-50,
-105
-);
+doc.line(50,45,50,100);
 
 doc.setFillColor(0);
 
-doc.roundedRect(
-8,
-52,
-30,
-7,
-1,
-1,
-"F"
-);
+doc.roundedRect(8,50,28,7,1,1,"F");
+
+doc.roundedRect(53,50,25,7,1,1,"F");
 
 doc.setTextColor(255);
+
+doc.setFontSize(8);
 
 doc.text(
 "FROM (SELLER)",
 11,
-57
-);
-
-doc.roundedRect(
-55,
-52,
-20,
-7,
-1,
-1,
-"F"
+55
 );
 
 doc.text(
-"SHIP TO",
-59,
-57
+"TO (BUYER)",
+58,
+55
 );
 
 doc.setTextColor(0);
 
 
-
-// SELLER DETAILS
+// SELLER
 
 doc.setFont(
 "helvetica",
@@ -199,9 +165,9 @@ doc.setFont(
 doc.setFontSize(14);
 
 doc.text(
-"VESPERA",
+"SUFIYAN",
 8,
-70
+68
 );
 
 doc.setFont(
@@ -218,7 +184,7 @@ doc.text(
 "Chalissery, Kerala - 679536"
 ],
 8,
-80
+77
 );
 
 doc.setFont(
@@ -229,31 +195,30 @@ doc.setFont(
 doc.text(
 "PIN : 679536",
 8,
-95
+91
 );
 
 doc.text(
 "PH : +91 8281088967",
 8,
-101
-);
-
-
-
-// CUSTOMER DETAILS
-
-doc.setFontSize(12);
-
-let cname =
-doc.splitTextToSize(
-customer,
-35
+97
 );
 
 doc.text(
-cname,
+"Customer id : 1265200969",
+8,
+103
+);
+
+
+// BUYER
+
+doc.setFontSize(13);
+
+doc.text(
+customer,
 53,
-70
+68
 );
 
 doc.setFont(
@@ -263,14 +228,14 @@ doc.setFont(
 
 doc.setFontSize(8);
 
-let caddress =
+let buyerAddress=
 doc.splitTextToSize(
 `${address}, ${district}`,
-35
+30
 );
 
 doc.text(
-caddress,
+buyerAddress,
 53,
 82
 );
@@ -283,15 +248,14 @@ doc.setFont(
 doc.text(
 `PIN : ${pin}`,
 53,
-96
+92
 );
 
 doc.text(
 `PH : ${phone}`,
 53,
-102
+98
 );
-
 
 
 // PRODUCT HEADER
@@ -300,7 +264,7 @@ doc.setFillColor(0);
 
 doc.rect(
 3,
-110,
+105,
 94,
 9,
 "F"
@@ -308,79 +272,68 @@ doc.rect(
 
 doc.setTextColor(255);
 
+doc.setFontSize(8);
+
 doc.text(
 "PRODUCT / ITEM",
 8,
-116
+111
 );
 
 doc.text(
 "QTY",
 70,
-116
+111
 );
 
 doc.text(
 "AMOUNT",
 80,
-116
+111
 );
 
 
-
-// PRODUCT ROW
+// PRODUCT
 
 doc.setTextColor(0);
 
 doc.setFontSize(10);
 
-let prod =
-doc.splitTextToSize(
-product,
-40
-);
-
 doc.text(
-prod,
+product,
 8,
-128
+123
 );
 
 doc.text(
 "1",
 72,
-128
+123
 );
 
 doc.text(
 `INR ${amount}`,
 92,
-128,
+123,
 {align:"right"}
 );
 
 doc.line(
 8,
-132,
+127,
 92,
-132
+127
 );
-
 
 
 // TOTAL
-
-doc.setFont(
-"helvetica",
-"bold"
-);
 
 doc.setFontSize(13);
 
 doc.text(
 "ORDER TOTAL",
 8,
-142
+138
 );
 
 doc.setFontSize(16);
@@ -388,31 +341,25 @@ doc.setFontSize(16);
 doc.text(
 `INR ${amount}`,
 92,
-142,
+138,
 {align:"right"}
 );
 
 doc.line(
 3,
-147,
+143,
 97,
-147
+143
 );
-
 
 
 // RETURN + THANK YOU
 
 doc.line(
 50,
-147,
+143,
 50,
 160
-);
-
-doc.setFont(
-"helvetica",
-"bold"
 );
 
 doc.setFontSize(8);
@@ -420,68 +367,47 @@ doc.setFontSize(8);
 doc.text(
 "RETURN ADDRESS",
 8,
-151
+149
 );
 
-doc.setFont(
-"helvetica",
-"normal"
-);
-
-doc.setFontSize(4.2);
+doc.setFontSize(5);
 
 doc.text(
 [
 "Name : Muhammed Sufiyan",
 "Mobile : 8281088967",
 "Address : Anapparambil House",
-"kerala,679536",
+"State : Kerala",
+"Pincode : 679536",
 "Area : Arakkal HMC Road",
 "City : Chalissery"
 ],
 8,
-154,
-{
-maxWidth:38,
-lineHeightFactor:0.85
-}
+152
 );
 
-
-// THANK YOU
-
-doc.setFont(
-"helvetica",
-"bold"
-);
 
 doc.setFontSize(10);
 
 doc.text(
 "THANK YOU",
-62,
-151
+63,
+149
 );
 
-doc.setFont(
-"helvetica",
-"normal"
-);
-
-doc.setFontSize(6);
+doc.setFontSize(7);
 
 doc.text(
 "We deliver happiness!",
-62,
-156
+63,
+155
 );
 
 doc.text(
 "www.vespera.in",
-62,
+63,
 160
 );
-
 
 
 // FOOTER
