@@ -1,10 +1,14 @@
 const { jsPDF } = window.jspdf;
 
 function numberToWords(num){
+
 const ones=["","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+
 const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
 
-if(num<20) return ones[num];
+if(num<20){
+return ones[num];
+}
 
 if(num<100){
 return tens[Math.floor(num/10)]+" "+ones[num%10];
@@ -14,8 +18,10 @@ if(num<1000){
 return ones[Math.floor(num/100)]+" hundred "+numberToWords(num%100);
 }
 
-return num;
+return num.toString();
+
 }
+
 
 function generatePDF(){
 
@@ -25,7 +31,8 @@ unit:"mm",
 format:[100,170]
 });
 
-// INPUT VALUES
+
+// FORM VALUES
 
 const customer=document.getElementById("customerName").value || "Customer";
 
@@ -51,32 +58,43 @@ document.querySelector(
 const amountWords=numberToWords(parseInt(amount));
 
 
+
 // BORDER
 
 doc.setLineWidth(.6);
+
 doc.rect(3,3,94,162);
+
 
 
 // PAYMENT BOX
 
 doc.setFillColor(0,0,0);
 
-doc.roundedRect(52,8,40,8,1,1,"F");
+doc.roundedRect(
+52,
+8,
+40,
+8,
+1,
+1,
+"F"
+);
 
 doc.setTextColor(255);
 
 doc.setFontSize(8);
 
 doc.text(
-payment==="COD" ?
-"CASH ON DELIVERY" :
-"PREPAID ORDER",
+payment==="COD"
+?"CASH ON DELIVERY"
+:"PREPAID ORDER",
 57,
 13
 );
 
 
-// PRICE BOX
+// AMOUNT BOX
 
 doc.setTextColor(0);
 
@@ -123,18 +141,47 @@ doc.text(
 40
 );
 
-doc.line(3,45,97,45);
+doc.line(
+3,
+45,
+97,
+45
+);
 
 
-// SELLER / BUYER
+// SELLER/BUYER DIVIDER
 
-doc.line(50,45,50,100);
+doc.line(
+50,
+45,
+50,
+100
+);
+
+
+// HEADINGS
 
 doc.setFillColor(0);
 
-doc.roundedRect(8,50,28,7,1,1,"F");
+doc.roundedRect(
+8,
+50,
+28,
+7,
+1,
+1,
+"F"
+);
 
-doc.roundedRect(53,50,25,7,1,1,"F");
+doc.roundedRect(
+53,
+50,
+25,
+7,
+1,
+1,
+"F"
+);
 
 doc.setTextColor(255);
 
@@ -213,6 +260,11 @@ doc.text(
 
 // BUYER
 
+doc.setFont(
+"helvetica",
+"bold"
+);
+
 doc.setFontSize(13);
 
 doc.text(
@@ -226,19 +278,22 @@ doc.setFont(
 "normal"
 );
 
-doc.setFontSize(8);
+doc.setFontSize(7);
 
-let buyerAddress=
+let buyerLines=
 doc.splitTextToSize(
 `${address}, ${district}`,
-30
+28
 );
 
 doc.text(
-buyerAddress,
+buyerLines,
 53,
-82
+80
 );
+
+let nextY=
+80+(buyerLines.length*4)+4;
 
 doc.setFont(
 "helvetica",
@@ -248,13 +303,13 @@ doc.setFont(
 doc.text(
 `PIN : ${pin}`,
 53,
-92
+nextY
 );
 
 doc.text(
 `PH : ${phone}`,
 53,
-98
+nextY+7
 );
 
 
@@ -293,7 +348,7 @@ doc.text(
 );
 
 
-// PRODUCT
+// PRODUCT ROW
 
 doc.setTextColor(0);
 
@@ -353,7 +408,7 @@ doc.line(
 );
 
 
-// RETURN + THANK YOU
+// RETURN ADDRESS
 
 doc.line(
 50,
@@ -370,7 +425,12 @@ doc.text(
 149
 );
 
-doc.setFontSize(5);
+doc.setFont(
+"helvetica",
+"normal"
+);
+
+doc.setFontSize(4.5);
 
 doc.text(
 [
@@ -387,12 +447,24 @@ doc.text(
 );
 
 
+// THANK YOU
+
+doc.setFont(
+"helvetica",
+"bold"
+);
+
 doc.setFontSize(10);
 
 doc.text(
 "THANK YOU",
 63,
 149
+);
+
+doc.setFont(
+"helvetica",
+"normal"
 );
 
 doc.setFontSize(7);
@@ -421,6 +493,7 @@ doc.rect(
 4,
 "F"
 );
+
 
 doc.save(
 `shipping-label-${serial}.pdf`
