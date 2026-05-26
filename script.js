@@ -1,75 +1,48 @@
 const { jsPDF } = window.jspdf;
 
-function numberToWords(num){
-
-const ones=["","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
-
-const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
-
-if(num<20){
-return ones[num];
-}
-
-if(num<100){
-return tens[Math.floor(num/10)]+" "+ones[num%10];
-}
-
-if(num<1000){
-return ones[Math.floor(num/100)]+" hundred "+numberToWords(num%100);
-}
-
-return num.toString();
-
-}
-
-
 function generatePDF(){
 
-const doc=new jsPDF({
+const doc = new jsPDF({
 orientation:"portrait",
 unit:"mm",
 format:[100,170]
 });
 
 
-// FORM VALUES
+// INPUT VALUES
 
-const customer=document.getElementById("customerName").value || "Customer";
+const customer=document.getElementById("customerName").value||"Customer";
 
-const address=document.getElementById("address").value || "-";
+const address=document.getElementById("address").value||"-";
 
-const district=document.getElementById("district").value || "-";
+const district=document.getElementById("district").value||"-";
 
-const pin=document.getElementById("pincode").value || "-";
+const pin=document.getElementById("pincode").value||"-";
 
-const phone=document.getElementById("phone").value || "-";
+const phone=document.getElementById("phone").value||"-";
 
-const product=document.getElementById("product").value || "Product";
+const product=document.getElementById("product").value||"Product";
 
-const amount=document.getElementById("orderValue").value || "0";
+const amount=document.getElementById("orderValue").value||"0";
 
-const serial=document.getElementById("serial").value || "DS1";
+const serial=document.getElementById("serial").value||"DS1";
 
 const payment=
 document.querySelector(
 'input[name="payment"]:checked'
 )?.value || "COD";
 
-const amountWords=numberToWords(parseInt(amount));
 
 
+// OUTER BORDER
 
-// BORDER
-
-doc.setLineWidth(.6);
-
+doc.setLineWidth(.7);
 doc.rect(3,3,94,162);
-
 
 
 // PAYMENT BOX
 
-doc.setFillColor(0,0,0);
+doc.setFillColor(0);
 
 doc.roundedRect(
 52,
@@ -83,13 +56,16 @@ doc.roundedRect(
 
 doc.setTextColor(255);
 
+doc.setFont(
+"helvetica",
+"bold"
+);
+
 doc.setFontSize(8);
 
 doc.text(
-payment==="COD"
-?"CASH ON DELIVERY"
-:"PREPAID ORDER",
-57,
+"CASH ON DELIVERY",
+58,
 13
 );
 
@@ -107,12 +83,7 @@ doc.roundedRect(
 1
 );
 
-doc.setFont(
-"helvetica",
-"bold"
-);
-
-doc.setFontSize(14);
+doc.setFontSize(13);
 
 doc.text(
 `INR ${amount}`,
@@ -121,25 +92,25 @@ doc.text(
 {align:"center"}
 );
 
+
 doc.setFontSize(5);
 
 doc.text(
-amountWords,
+"three hundred ninety nine",
 72,
-34,
+33,
 {align:"center"}
 );
 
-
-// ORDER ID
 
 doc.setFontSize(8);
 
 doc.text(
 `ORDER ID : ${serial}`,
-58,
+63,
 40
 );
+
 
 doc.line(
 3,
@@ -149,7 +120,7 @@ doc.line(
 );
 
 
-// SELLER/BUYER DIVIDER
+// MIDDLE DIVISION
 
 doc.line(
 50,
@@ -159,15 +130,15 @@ doc.line(
 );
 
 
-// HEADINGS
+// SECTION TITLES
 
 doc.setFillColor(0);
 
 doc.roundedRect(
 8,
 50,
-28,
-7,
+24,
+6,
 1,
 1,
 "F"
@@ -176,8 +147,8 @@ doc.roundedRect(
 doc.roundedRect(
 53,
 50,
-25,
-7,
+20,
+6,
 1,
 1,
 "F"
@@ -185,31 +156,32 @@ doc.roundedRect(
 
 doc.setTextColor(255);
 
-doc.setFontSize(8);
+doc.setFontSize(7);
 
 doc.text(
 "FROM (SELLER)",
 11,
-55
+54
 );
 
 doc.text(
 "TO (BUYER)",
-58,
-55
+57,
+54
 );
+
 
 doc.setTextColor(0);
 
 
-// SELLER
+// FROM SELLER
 
 doc.setFont(
 "helvetica",
 "bold"
 );
 
-doc.setFontSize(14);
+doc.setFontSize(11);
 
 doc.text(
 "SUFIYAN",
@@ -217,12 +189,13 @@ doc.text(
 68
 );
 
+
 doc.setFont(
 "helvetica",
 "normal"
 );
 
-doc.setFontSize(7);
+doc.setFontSize(6);
 
 doc.text(
 [
@@ -231,8 +204,9 @@ doc.text(
 "Chalissery, Kerala - 679536"
 ],
 8,
-77
+78
 );
+
 
 doc.setFont(
 "helvetica",
@@ -242,58 +216,62 @@ doc.setFont(
 doc.text(
 "PIN : 679536",
 8,
-91
+92
 );
 
 doc.text(
 "PH : +91 8281088967",
 8,
-97
+98
 );
 
 doc.text(
 "Customer id : 1265200969",
 8,
-103
+104
 );
 
 
-// BUYER
+// TO BUYER
 
-doc.setFont(
-"helvetica",
-"bold"
+doc.setFontSize(11);
+
+let buyerName=
+doc.splitTextToSize(
+customer,
+22
 );
-
-doc.setFontSize(13);
 
 doc.text(
-customer,
+buyerName,
 53,
 68
 );
+
 
 doc.setFont(
 "helvetica",
 "normal"
 );
 
-doc.setFontSize(7);
+doc.setFontSize(6);
 
-let buyerLines=
+
+let buyerAddress=
 doc.splitTextToSize(
-`${address}, ${district}`,
-28
+`${address}
+Area : ${district}
+City : malappuram`,
+22
 );
+
 
 doc.text(
-buyerLines,
+buyerAddress,
 53,
-80
+82
 );
 
-let nextY=
-80+(buyerLines.length*4)+4;
 
 doc.setFont(
 "helvetica",
@@ -303,13 +281,13 @@ doc.setFont(
 doc.text(
 `PIN : ${pin}`,
 53,
-nextY
+98
 );
 
 doc.text(
 `PH : ${phone}`,
 53,
-nextY+7
+104
 );
 
 
@@ -319,118 +297,116 @@ doc.setFillColor(0);
 
 doc.rect(
 3,
-105,
+110,
 94,
-9,
+8,
 "F"
 );
 
 doc.setTextColor(255);
 
-doc.setFontSize(8);
+doc.setFontSize(7);
 
 doc.text(
 "PRODUCT / ITEM",
 8,
-111
+115
 );
 
 doc.text(
 "QTY",
-70,
-111
+68,
+115
 );
 
 doc.text(
 "AMOUNT",
-80,
-111
+82,
+115
 );
 
 
-// PRODUCT ROW
-
 doc.setTextColor(0);
 
-doc.setFontSize(10);
+
+// PRODUCT
+
+doc.setFontSize(9);
 
 doc.text(
-product,
+product.toUpperCase(),
 8,
-123
+128
 );
 
 doc.text(
 "1",
-72,
-123
+70,
+128
 );
 
 doc.text(
 `INR ${amount}`,
-92,
-123,
-{align:"right"}
+82,
+128
 );
+
 
 doc.line(
 8,
-127,
+132,
 92,
-127
+132
 );
 
 
 // TOTAL
 
-doc.setFontSize(13);
+doc.setFontSize(11);
 
 doc.text(
 "ORDER TOTAL",
 8,
-138
+145
 );
 
-doc.setFontSize(16);
+doc.setFontSize(13);
 
 doc.text(
 `INR ${amount}`,
-92,
-138,
-{align:"right"}
+82,
+145
 );
+
 
 doc.line(
 3,
-143,
+150,
 97,
-143
+150
 );
 
 
-// RETURN ADDRESS
+// RETURN + THANK YOU
 
 doc.line(
 50,
-143,
+150,
 50,
-160
+161
 );
 
-doc.setFontSize(8);
+
+doc.setFontSize(7);
 
 doc.text(
 "RETURN ADDRESS",
 8,
-149
+155
 );
 
-doc.setFont(
-"helvetica",
-"normal"
-);
 
-doc.setFontSize(4.5);
+doc.setFontSize(5);
 
 doc.text(
 [
@@ -443,42 +419,31 @@ doc.text(
 "City : Chalissery"
 ],
 8,
-152
+159
 );
 
 
-// THANK YOU
-
-doc.setFont(
-"helvetica",
-"bold"
-);
-
-doc.setFontSize(10);
+doc.setFontSize(8);
 
 doc.text(
 "THANK YOU",
 63,
-149
+155
 );
 
-doc.setFont(
-"helvetica",
-"normal"
-);
 
-doc.setFontSize(7);
+doc.setFontSize(6);
 
 doc.text(
 "We deliver happiness!",
 63,
-155
+160
 );
 
 doc.text(
 "www.vespera.in",
 63,
-160
+165
 );
 
 
@@ -494,6 +459,8 @@ doc.rect(
 "F"
 );
 
+
+// SAVE PDF
 
 doc.save(
 `shipping-label-${serial}.pdf`
