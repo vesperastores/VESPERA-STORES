@@ -105,7 +105,7 @@ doc.setTextColor(0);
 // SELLER
 doc.setFont("helvetica","bold");
 FS(14);
-doc.text("VESPERA",X(8),Y(68));
+doc.text("SUFIYAN",X(8),Y(68));
 
 doc.setFont("helvetica","normal");
 FS(7);
