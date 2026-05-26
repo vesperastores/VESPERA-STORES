@@ -212,47 +212,29 @@ doc.text(
 
 
 // BUYER SECTION
-
-doc.setFont("helvetica","bold");
+doc.setFont("helvetica", "bold");
 doc.setFontSize(13);
 
-doc.text(
-customer,
-53,
-68
-);
+doc.text(customer, 53, 68);
 
-doc.setFont("helvetica","normal");
+doc.setFont("helvetica", "normal");
 doc.setFontSize(7);
 
-// Split long address into multiple lines
-let buyerLines = doc.splitTextToSize(
-`${address}`,
-28
-);
+// address
+let buyerLines = doc.splitTextToSize(address, 28);
+doc.text(buyerLines, 53, 82);
 
-doc.text(
-buyerLines,
-53,
-82
-);
+// move cursor properly
+let y = 82 + (buyerLines.length * 4) + 4;
 
-// Calculate dynamic position after address
-let nextY = 82 + (buyerLines.length * 4) + 4;
+doc.setFont("helvetica", "bold");
 
-doc.setFont("helvetica","bold");
+doc.text(`PIN : ${pin}`, 53, y);
 
-doc.text(
-`PIN : ${pin}`,
-53,
-nextY
-);
+// move next line properly
+y += 5;
 
-doc.text(
-`PH : ${phone}`,
-53,
-110
-);
+doc.text(`PH : ${phone}`, 53, y);
 
 
 // PRODUCT HEADER
