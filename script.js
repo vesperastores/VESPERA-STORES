@@ -1,355 +1,175 @@
 const { jsPDF } = window.jspdf;
 
+let labels = [];
+
 function numberToWords(num){
+num = parseInt(num) || 0;
+
 const ones=["","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
 const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
 
-if(num<20) return ones[num];
+if(num < 20) return ones[num];
+if(num < 100) return tens[Math.floor(num/10)] + (num%10 ? " " + ones[num%10] : "");
+if(num < 1000) return ones[Math.floor(num/100)] + " hundred" + (num%100 ? " " + numberToWords(num%100) : "");
 
-if(num<100){
-return tens[Math.floor(num/10)]+" "+ones[num%10];
+return num.toString();
 }
 
-if(num<1000){
-return ones[Math.floor(num/100)]+" hundred "+numberToWords(num%100);
-}
+function addLabel(){
 
-return num;
-}
-
-function generatePDF(){
-
-const doc=new jsPDF({
-orientation:"portrait",
-unit:"mm",
-format:[100,170]
+labels.push({
+customer: document.getElementById("customerName").value || "Customer",
+address: document.getElementById("address").value || "-",
+pin: document.getElementById("pincode").value || "-",
+phone: document.getElementById("phone").value || "-",
+product: document.getElementById("product").value || "Product",
+amount: document.getElementById("orderValue").value || "0",
+serial: document.getElementById("serial").value || "DS1",
+payment: document.querySelector('input[name="payment"]:checked')?.value || "COD"
 });
 
-// INPUT VALUES
+alert(labels.length + " label added");
 
-const customer=document.getElementById("customerName").value || "Customer";
+document.getElementById("customerName").value = "";
+document.getElementById("address").value = "";
+document.getElementById("pincode").value = "";
+document.getElementById("phone").value = "";
+document.getElementById("product").value = "";
+document.getElementById("orderValue").value = "";
+document.getElementById("serial").value = "";
 
-const address=document.getElementById("address").value || "-";
+}
 
-const district=document.getElementById("district").value || "-";
+function drawLabel(doc, ox, oy, data){
 
-const pin=document.getElementById("pincode").value || "-";
+const s = 0.87;
 
-const phone=document.getElementById("phone").value || "-";
+function X(v){ return ox + v * s; }
+function Y(v){ return oy + v * s; }
+function FS(v){ doc.setFontSize(v * s); }
 
-const product=document.getElementById("product").value || "Product";
-
-const amount=document.getElementById("orderValue").value || "0";
-
-const serial=document.getElementById("serial").value || "DS1";
-
-const payment=
-document.querySelector(
-'input[name="payment"]:checked'
-)?.value || "COD";
-
-const amountWords=numberToWords(parseInt(amount));
-
+const amountWords = numberToWords(data.amount);
 
 // BORDER
-
-doc.setLineWidth(.6);
-doc.rect(3,3,94,162);
-
+doc.setLineWidth(.4);
+doc.rect(X(3),Y(3),94*s,162*s);
 
 // PAYMENT BOX
-
-doc.setFillColor(0,0,0);
-
-doc.roundedRect(52,8,40,8,1,1,"F");
+doc.setFillColor(0);
+doc.roundedRect(X(52),Y(8),40*s,8*s,1,1,"F");
 
 doc.setTextColor(255);
-
-doc.setFontSize(8);
-
+FS(8);
 doc.text(
-payment==="COD" ?
-"CASH ON DELIVERY" :
-"PREPAID ORDER",
-57,
-13
+data.payment === "COD" ? "CASH ON DELIVERY" : "PREPAID ORDER",
+X(72),
+Y(13),
+{align:"center"}
 );
-
 
 // PRICE BOX
-
 doc.setTextColor(0);
+doc.roundedRect(X(52),Y(18),40*s,18*s,1,1);
 
-doc.roundedRect(
-52,
-18,
-40,
-18,
-1,
-1
-);
+doc.setFont("helvetica","bold");
+FS(14);
+doc.text(`INR ${data.amount}`,X(72),Y(28),{align:"center"});
 
-doc.setFont(
-"helvetica",
-"bold"
-);
-
-doc.setFontSize(14);
-
-doc.text(
-`INR ${amount}`,
-72,
-28,
-{align:"center"}
-);
-
-doc.setFontSize(5);
-
-doc.text(
-amountWords,
-72,
-34,
-{align:"center"}
-);
-
+FS(5);
+doc.text(amountWords,X(72),Y(34),{align:"center"});
 
 // ORDER ID
+FS(8);
+doc.text(`ORDER ID : ${data.serial}`,X(58),Y(40));
 
-doc.setFontSize(8);
-
-doc.text(
-`ORDER ID : ${serial}`,
-58,
-40
-);
-
-doc.line(3,45,97,45);
-
+doc.line(X(3),Y(45),X(97),Y(45));
 
 // SELLER / BUYER
-
-doc.line(50,45,50,100);
+doc.line(X(50),Y(45),X(50),Y(100));
 
 doc.setFillColor(0);
-
-doc.roundedRect(8,50,28,7,1,1,"F");
-
-doc.roundedRect(53,50,25,7,1,1,"F");
+doc.roundedRect(X(8),Y(50),28*s,7*s,1,1,"F");
+doc.roundedRect(X(53),Y(50),25*s,7*s,1,1,"F");
 
 doc.setTextColor(255);
-
-doc.setFontSize(8);
-
-doc.text(
-"FROM (SELLER)",
-11,
-55
-);
-
-doc.text(
-"TO (BUYER)",
-58,
-55
-);
+FS(8);
+doc.text("FROM (SELLER)",X(11),Y(55));
+doc.text("TO (BUYER)",X(58),Y(55));
 
 doc.setTextColor(0);
 
-
 // SELLER
+doc.setFont("helvetica","bold");
+FS(14);
+doc.text("VESPERA",X(8),Y(68));
 
-doc.setFont(
-"helvetica",
-"bold"
-);
-
-doc.setFontSize(14);
-
-doc.text(
-"VESPERA",
-8,
-68
-);
-
-doc.setFont(
-"helvetica",
-"normal"
-);
-
-doc.setFontSize(7);
-
-doc.text(
-[
+doc.setFont("helvetica","normal");
+FS(7);
+doc.text([
 "Anapparambil House",
 "Arakkal HMC Road",
 "Chalissery, Kerala - 679536"
-],
-8,
-77
-);
+],X(8),Y(77));
 
-doc.setFont(
-"helvetica",
-"bold"
-);
+doc.setFont("helvetica","bold");
+doc.text("PIN : 679536",X(8),Y(91));
+doc.text("PH : +91 8281088967",X(8),Y(97));
+doc.text("Customer id : 1265200969",X(8),Y(103));
 
-doc.text(
-"PIN : 679536",
-8,
-91
-);
+// BUYER
+doc.setFont("helvetica","bold");
+FS(13);
+doc.text(data.customer,X(53),Y(68));
 
-doc.text(
-"PH : +91 8281088967",
-8,
-97
-);
+doc.setFont("helvetica","normal");
+FS(6);
 
-doc.text(
-"Customer id : 1265200969",
-8,
-103
-);
+let buyerLines = doc.splitTextToSize(data.address,28*s);
+buyerLines = buyerLines.slice(0,4);
 
-// BUYER SECTION
-doc.setFont("helvetica", "bold");
-doc.setFontSize(13);
+doc.text(buyerLines,X(53),Y(80));
 
-doc.text(customer, 53, 68);
+doc.setFont("helvetica","bold");
+FS(7);
+doc.text(`PIN : ${data.pin}`,X(53),Y(95));
+doc.text(`PH : ${data.phone}`,X(53),Y(101));
 
-doc.setFont("helvetica", "normal");
-doc.setFontSize(6);
-
-// address - limited width and limited lines
-let buyerLines = doc.splitTextToSize(address, 28);
-
-// keep only first 4 lines so PIN/PH will stay visible
-buyerLines = buyerLines.slice(0, 4);
-
-doc.text(buyerLines, 53, 80);
-
-// fixed positions
-doc.setFont("helvetica", "bold");
-doc.setFontSize(7);
-
-doc.text(`PIN : ${pin}`, 53, 95);
-
-doc.text(`PH : ${phone}`, 53, 101);
 // PRODUCT HEADER
-
 doc.setFillColor(0);
-
-doc.rect(
-3,
-105,
-94,
-9,
-"F"
-);
+doc.rect(X(3),Y(105),94*s,9*s,"F");
 
 doc.setTextColor(255);
-
-doc.setFontSize(8);
-
-doc.text(
-"PRODUCT / ITEM",
-8,
-111
-);
-
-doc.text(
-"QTY",
-70,
-111
-);
-
-doc.text(
-"AMOUNT",
-80,
-111
-);
-
+FS(8);
+doc.text("PRODUCT / ITEM",X(8),Y(111));
+doc.text("QTY",X(70),Y(111));
+doc.text("AMOUNT",X(80),Y(111));
 
 // PRODUCT
-
 doc.setTextColor(0);
+FS(10);
+doc.text(data.product,X(8),Y(123));
+doc.text("1",X(72),Y(123));
+doc.text(`INR ${data.amount}`,X(92),Y(123),{align:"right"});
 
-doc.setFontSize(10);
-
-doc.text(
-product,
-8,
-123
-);
-
-doc.text(
-"1",
-72,
-123
-);
-
-doc.text(
-`INR ${amount}`,
-92,
-123,
-{align:"right"}
-);
-
-doc.line(
-8,
-127,
-92,
-127
-);
-
+doc.line(X(8),Y(127),X(92),Y(127));
 
 // TOTAL
+FS(13);
+doc.text("ORDER TOTAL",X(8),Y(138));
 
-doc.setFontSize(13);
+FS(16);
+doc.text(`INR ${data.amount}`,X(92),Y(138),{align:"right"});
 
-doc.text(
-"ORDER TOTAL",
-8,
-138
-);
-
-doc.setFontSize(16);
-
-doc.text(
-`INR ${amount}`,
-92,
-138,
-{align:"right"}
-);
-
-doc.line(
-3,
-143,
-97,
-143
-);
-
+doc.line(X(3),Y(143),X(97),Y(143));
 
 // RETURN + THANK YOU
+doc.line(X(50),Y(143),X(50),Y(160));
 
-doc.line(
-50,
-143,
-50,
-160
-);
+FS(8);
+doc.text("RETURN ADDRESS",X(8),Y(149));
 
-doc.setFontSize(8);
-
-doc.text(
-"RETURN ADDRESS",
-8,
-149
-);
-
-doc.setFontSize(5);
-
-doc.text(
-[
+FS(5);
+doc.text([
 "Name : Muhammed Sufiyan",
 "Mobile : 8281088967",
 "Address : Anapparambil House",
@@ -357,49 +177,53 @@ doc.text(
 "Pincode : 679536",
 "Area : Arakkal HMC Road",
 "City : Chalissery"
-],
-8,
-152
-);
+],X(8),Y(152));
 
+FS(10);
+doc.text("THANK YOU",X(63),Y(149));
 
-doc.setFontSize(10);
-
-doc.text(
-"THANK YOU",
-63,
-149
-);
-
-doc.setFontSize(7);
-
-doc.text(
-"We deliver happiness!",
-63,
-155
-);
-
-doc.text(
-"www.vespera.in",
-63,
-160
-);
-
+FS(7);
+doc.text("We deliver happiness!",X(63),Y(155));
+doc.text("www.vespera.in",X(63),Y(160));
 
 // FOOTER
-
 doc.setFillColor(0);
+doc.rect(X(3),Y(161),94*s,4*s,"F");
 
-doc.rect(
-3,
-161,
-94,
-4,
-"F"
-);
+}
 
-doc.save(
-`shipping-label-${serial}.pdf`
-);
+function generateA4PDF(){
+
+if(labels.length === 0){
+alert("Add at least one label first");
+return;
+}
+
+const doc = new jsPDF({
+orientation:"portrait",
+unit:"mm",
+format:"a4"
+});
+
+const positions = [
+[9,0],
+[114,0],
+[9,148.5],
+[114,148.5]
+];
+
+labels.forEach((label,index)=>{
+
+if(index > 0 && index % 4 === 0){
+doc.addPage();
+}
+
+const pos = positions[index % 4];
+
+drawLabel(doc,pos[0],pos[1],label);
+
+});
+
+doc.save("vespera-a4-labels.pdf");
 
 }
