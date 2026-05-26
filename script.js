@@ -3,9 +3,9 @@ const { jsPDF } = window.jspdf;
 function generatePDF() {
 
 const doc = new jsPDF({
-orientation:"portrait",
-unit:"mm",
-format:[100,170]
+    orientation: "portrait",
+    unit: "mm",
+    format: [100,170]
 });
 
 // INPUTS
@@ -40,57 +40,46 @@ return tens[Math.floor(n/10)]+" "+ones[n%10];
 }
 
 if(n<1000){
-return ones[Math.floor(n/100)]+" hundred "+
+return ones[Math.floor(n/100)]+" hundred " +
 (n%100 ? amountWords(n%100) : "");
 }
 
 return n.toString();
-
 }
 
-let words=amountWords(amount);
+const words=amountWords(amount);
 
 
-// BORDER
-doc.setLineWidth(0.7);
+// OUTER BORDER
+doc.setLineWidth(.7);
 doc.rect(3,3,94,162);
 
 
-// PAYMENT BOX
+// PAYMENT
 doc.setFillColor(0);
 
-doc.roundedRect(
-55,8,37,8,1,1,"F"
-);
+doc.roundedRect(55,8,37,8,1,1,"F");
 
 doc.setTextColor(255);
-
 doc.setFont("helvetica","bold");
 doc.setFontSize(8);
 
 doc.text(
 payment==="COD"
-?"CASH ON DELIVERY"
-:"PREPAID",
+? "CASH ON DELIVERY"
+: "PREPAID",
 73,
 13,
 {align:"center"}
 );
 
 
-// RESET TEXT
+// RESET
 doc.setTextColor(0);
 
 
 // PRICE BOX
-doc.roundedRect(
-55,
-18,
-37,
-18,
-1,
-1
-);
+doc.roundedRect(55,18,37,18,1,1);
 
 doc.setFontSize(14);
 
@@ -112,7 +101,6 @@ words,
 
 
 // ORDER ID
-
 doc.setFontSize(8);
 
 doc.text(
@@ -122,32 +110,21 @@ doc.text(
 {align:"center"}
 );
 
-doc.line(
-3,
-45,
-97,
-45
-);
+doc.line(3,45,97,45);
 
 
-// CENTER LINE
-
-doc.line(
-50,
-45,
-50,
-100
-);
+// DIVIDER
+doc.line(50,45,50,100);
 
 
-// FROM BOX
+// FROM LABEL
 
 doc.setFillColor(0);
 
 doc.roundedRect(
 8,
 50,
-28,
+32,
 7,
 1,
 1,
@@ -156,20 +133,24 @@ doc.roundedRect(
 
 doc.setTextColor(255);
 
+doc.setFontSize(7);
+
 doc.text(
 "FROM (SELLER)",
-22,
-55,
-{align:"center"}
+24,
+54.5,
+{
+align:"center"
+}
 );
 
 
-// TO BOX (FIXED)
+// TO LABEL (FIXED)
 
 doc.roundedRect(
 53,
 50,
-28,
+32,
 7,
 1,
 1,
@@ -178,20 +159,21 @@ doc.roundedRect(
 
 doc.text(
 "TO (BUYER)",
-67,
-55,
-{align:"center"}
+69,
+54.5,
+{
+align:"center"
+}
 );
 
 
-// RESET TO BLACK
+// RESET COLOR
 doc.setTextColor(0);
 
 
 // SELLER DETAILS
 
 doc.setFont("helvetica","bold");
-
 doc.setFontSize(12);
 
 doc.text(
@@ -201,7 +183,6 @@ doc.text(
 );
 
 doc.setFont("helvetica","normal");
-
 doc.setFontSize(6);
 
 doc.text(
@@ -216,23 +197,9 @@ doc.text(
 
 doc.setFont("helvetica","bold");
 
-doc.text(
-"PIN : 679536",
-8,
-90
-);
-
-doc.text(
-"PH : +91 8281088967",
-8,
-96
-);
-
-doc.text(
-"Customer id : 1265200969",
-8,
-102
-);
+doc.text("PIN : 679536",8,90);
+doc.text("PH : +91 8281088967",8,96);
+doc.text("Customer id : 1265200969",8,102);
 
 
 // BUYER DETAILS
@@ -246,14 +213,10 @@ customer,
 );
 
 doc.setFont("helvetica","normal");
-
 doc.setFontSize(6);
 
-let buyerAddress=
-doc.splitTextToSize(
-address,
-24
-);
+const buyerAddress=
+doc.splitTextToSize(address,24);
 
 doc.text(
 buyerAddress,
@@ -280,38 +243,18 @@ doc.text(
 
 doc.setFillColor(0);
 
-doc.rect(
-3,
-106,
-94,
-8,
-"F"
-);
+doc.rect(3,106,94,8,"F");
 
 doc.setTextColor(255);
 
-doc.text(
-"PRODUCT / ITEM",
-8,
-111
-);
-
-doc.text(
-"QTY",
-72,
-111
-);
-
-doc.text(
-"AMOUNT",
-86,
-111
-);
-
-doc.setTextColor(0);
+doc.text("PRODUCT / ITEM",8,111);
+doc.text("QTY",72,111);
+doc.text("AMOUNT",86,111);
 
 
 // PRODUCT ROW
+
+doc.setTextColor(0);
 
 doc.setFontSize(10);
 
@@ -334,12 +277,7 @@ doc.text(
 {align:"right"}
 );
 
-doc.line(
-8,
-128,
-92,
-128
-);
+doc.line(8,128,92,128);
 
 
 // TOTAL
@@ -361,40 +299,21 @@ doc.text(
 {align:"right"}
 );
 
-doc.line(
-3,
-144,
-97,
-144
-);
+doc.line(3,144,97,144);
 
 
-// RETURN SECTION
+// RETURN + THANK YOU
 
-doc.line(
-50,
-144,
-50,
-160
-);
+doc.line(50,144,50,160);
 
 doc.setFontSize(8);
 
-doc.text(
-"RETURN ADDRESS",
-8,
-149
-);
-
-doc.text(
-"THANK YOU",
-63,
-149
-);
-
-doc.setFont("helvetica","normal");
+doc.text("RETURN ADDRESS",8,149);
+doc.text("THANK YOU",63,149);
 
 doc.setFontSize(4.5);
+
+doc.setFont("helvetica","normal");
 
 doc.text(
 [
@@ -426,19 +345,10 @@ doc.text(
 
 
 // FOOTER
-
 doc.setFillColor(0);
 
-doc.rect(
-3,
-161,
-94,
-4,
-"F"
-);
+doc.rect(3,161,94,4,"F");
 
-doc.save(
-`shipping-label-${serial}.pdf`
-);
+doc.save(`shipping-label-${serial}.pdf`);
 
 }
