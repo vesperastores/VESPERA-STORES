@@ -27,7 +27,10 @@ amount: document.getElementById("orderValue").value || "0",
 serial: document.getElementById("serial").value || "DS1",
 payment: document.querySelector('input[name="payment"]:checked')?.value || "COD"
 });
-
+  
+document.getElementById("labelCount").innerText =
+labels.length + " Labels Added";
+  
 alert(labels.length + " label added");
 
 document.getElementById("customerName").value = "";
@@ -37,6 +40,7 @@ document.getElementById("phone").value = "";
 document.getElementById("product").value = "";
 document.getElementById("orderValue").value = "";
 document.getElementById("serial").value = "";
+document.getElementById("district").value = "";
 
 }
 
@@ -225,5 +229,30 @@ drawLabel(doc,pos[0],pos[1],label);
 });
 
 doc.save("vespera-a4-labels.pdf");
+
+}
+
+function generatePDF(){
+
+const data = {
+customer: document.getElementById("customerName").value || "Customer",
+address: document.getElementById("address").value || "-",
+pin: document.getElementById("pincode").value || "-",
+phone: document.getElementById("phone").value || "-",
+product: document.getElementById("product").value || "Product",
+amount: document.getElementById("orderValue").value || "0",
+serial: document.getElementById("serial").value || "DS1",
+payment: document.querySelector('input[name="payment"]:checked')?.value || "COD"
+};
+
+const doc = new jsPDF({
+orientation:"portrait",
+unit:"mm",
+format:[100,170]
+});
+
+drawLabel(doc,0,0,data);
+
+doc.save(`shipping-label-${data.serial}.pdf`);
 
 }
