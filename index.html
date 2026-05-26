@@ -247,6 +247,10 @@ placeholder="₹ 0"
 
 </div>
 
+<button onclick="generatePDF()">
+Generate Single Label
+</button>
+
 <button onclick="addLabel()">
 Add Label
 </button>
@@ -254,3 +258,17 @@ Add Label
 <button onclick="generateA4PDF()" style="margin-top:10px;">
 Generate A4 PDF
 </button>
+
+<p id="labelCount" style="text-align:center; margin-top:10px; color:#c8a96b; font-weight:600;">
+0 Labels Added
+</p>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
