@@ -250,7 +250,6 @@ doc.line(
 
 // ORDER TOTAL
 doc.setFontSize(11);
-
 doc.setFont("helvetica","bold");
 
 doc.text(
@@ -263,8 +262,9 @@ doc.setFontSize(14);
 
 doc.text(
 `INR ${amount}`,
-82,
-140
+95,
+140,
+{align:"right"}
 );
 
 
