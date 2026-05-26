@@ -10,7 +10,6 @@ format:[100,170]
 
 
 // INPUTS
-
 const customer=document.getElementById("customerName").value || "Customer";
 const address=document.getElementById("address").value || "-";
 const pin=document.getElementById("pincode").value || "-";
@@ -29,7 +28,9 @@ const payment=document.querySelector(
 function amountWords(n){
 
 const ones=["","one","two","three","four","five","six","seven","eight","nine"];
+
 const teens=["ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+
 const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
 
 n=parseInt(n);
@@ -39,16 +40,12 @@ if(n<10) return ones[n];
 if(n<20) return teens[n-10];
 
 if(n<100){
-
 return tens[Math.floor(n/10)]+" "+ones[n%10];
-
 }
 
 if(n<1000){
-
-return ones[Math.floor(n/100)]+" hundred " +
-(n%100 ? amountWords(n%100) : "");
-
+return ones[Math.floor(n/100)]+" hundred "+
+(n%100?amountWords(n%100):"");
 }
 
 return n.toString();
@@ -58,7 +55,7 @@ return n.toString();
 let words=amountWords(amount);
 
 
-// BORDER
+// OUTER BORDER
 
 doc.setLineWidth(.7);
 
@@ -84,25 +81,32 @@ doc.roundedRect(
 "F"
 );
 
-doc.setTextColor(255);
+doc.setTextColor(255,255,255);
 
-doc.setFont("helvetica","bold");
+doc.setFont(
+"helvetica",
+"bold"
+);
 
 doc.setFontSize(8);
 
 doc.text(
 payment==="COD"
-?"CASH ON DELIVERY"
-:"PREPAID",
+?
+"CASH ON DELIVERY"
+:
+"PREPAID",
 73,
 13,
-{align:"center"}
+{
+align:"center"
+}
 );
 
 
-// PRICE BOX
+// AMOUNT BOX
 
-doc.setTextColor(0);
+doc.setTextColor(0,0,0);
 
 doc.roundedRect(
 55,
@@ -119,7 +123,9 @@ doc.text(
 `INR ${amount}`,
 73,
 28,
-{align:"center"}
+{
+align:"center"
+}
 );
 
 doc.setFontSize(4);
@@ -128,7 +134,9 @@ doc.text(
 words,
 73,
 33,
-{align:"center"}
+{
+align:"center"
+}
 );
 
 
@@ -140,7 +148,9 @@ doc.text(
 `ORDER ID : ${serial}`,
 73,
 40,
-{align:"center"}
+{
+align:"center"
+}
 );
 
 doc.line(
@@ -151,7 +161,7 @@ doc.line(
 );
 
 
-// CENTER DIVIDER
+// MIDDLE LINE
 
 doc.line(
 50,
@@ -183,11 +193,13 @@ doc.text(
 "FROM (SELLER)",
 22,
 55,
-{align:"center"}
+{
+align:"center"
+}
 );
 
 
-// TO LABEL (FIXED)
+// TO LABEL
 
 doc.roundedRect(
 53,
@@ -203,7 +215,9 @@ doc.text(
 "TO (BUYER)",
 67,
 55,
-{align:"center"}
+{
+align:"center"
+}
 );
 
 doc.setTextColor(0);
@@ -369,7 +383,9 @@ doc.text(
 `INR ${amount}`,
 95,
 124,
-{align:"right"}
+{
+align:"right"
+}
 );
 
 doc.line(
@@ -380,7 +396,7 @@ doc.line(
 );
 
 
-// ORDER TOTAL
+// TOTAL
 
 doc.setFontSize(13);
 
@@ -396,7 +412,9 @@ doc.text(
 `INR ${amount}`,
 95,
 140,
-{align:"right"}
+{
+align:"right"
+}
 );
 
 doc.line(
@@ -430,12 +448,12 @@ doc.text(
 149
 );
 
-doc.setFontSize(4.5);
-
 doc.setFont(
 "helvetica",
 "normal"
 );
+
+doc.setFontSize(4.5);
 
 doc.text(
 [
