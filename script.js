@@ -210,7 +210,6 @@ doc.text(
 103
 );
 
-
 // BUYER SECTION
 doc.setFont("helvetica", "bold");
 doc.setFontSize(13);
@@ -218,23 +217,23 @@ doc.setFontSize(13);
 doc.text(customer, 53, 68);
 
 doc.setFont("helvetica", "normal");
+doc.setFontSize(6);
+
+// address - limited width and limited lines
+let buyerLines = doc.splitTextToSize(address, 28);
+
+// keep only first 4 lines so PIN/PH will stay visible
+buyerLines = buyerLines.slice(0, 4);
+
+doc.text(buyerLines, 53, 80);
+
+// fixed positions
+doc.setFont("helvetica", "bold");
 doc.setFontSize(7);
 
-// address
-let buyerLines = doc.splitTextToSize(address, 28);
-doc.text(buyerLines, 53, 82);
+doc.text(`PIN : ${pin}`, 53, 95);
 
-// move cursor properly
-let y = 82 + (buyerLines.length * 4) + 4;
-
-doc.setFont("helvetica", "bold");
-
-doc.text(`PIN : ${pin}`, 53, y);
-
-// move next line properly
-y += 5;
-
-doc.text(`PH : ${phone}`, 53, y);
+doc.text(`PH : ${phone}`, 53, 101);
 // PRODUCT HEADER
 
 doc.setFillColor(0);
