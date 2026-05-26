@@ -1,13 +1,3 @@
-const { jsPDF } = window.jspdf;
-
-function generatePDF() {
-
-const doc = new jsPDF({
-    orientation:"portrait",
-    unit:"mm",
-    format:[100,170]
-});
-
 // INPUTS
 const customer=document.getElementById("customerName").value || "Customer";
 const address=document.getElementById("address").value || "-";
@@ -22,73 +12,35 @@ const payment=document.querySelector(
 )?.value || "COD";
 
 
-// NUMBER TO WORDS
-function amountWords(n){
-
-n=parseInt(n);
-
-const ones=["","one","two","three","four","five","six","seven","eight","nine"];
-const teens=["ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
-const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
-
-if(n<10) return ones[n];
-
-if(n<20) return teens[n-10];
-
-if(n<100){
-return tens[Math.floor(n/10)]+" "+ones[n%10];
-}
-
-if(n<1000){
-return ones[Math.floor(n/100)]+" hundred " +
-(n%100 ? amountWords(n%100) : "");
-}
-
-return n.toString();
-}
-
-const words=amountWords(amount);
-
-
 // BORDER
-doc.setLineWidth(.7);
+doc.setLineWidth(0.7);
 doc.rect(3,3,94,162);
 
 
 // PAYMENT BOX
 doc.setFillColor(0);
-
-doc.roundedRect(
-55,8,37,8,1,1,"F"
-);
+doc.roundedRect(55,8,37,8,1,1,"F");
 
 doc.setTextColor(255);
 doc.setFont("helvetica","bold");
 doc.setFontSize(8);
 
 doc.text(
-payment==="COD"
-? "CASH ON DELIVERY"
-: "PREPAID",
+payment==="COD" ?
+"CASH ON DELIVERY" :
+"PREPAID",
 73,
 13,
 {align:"center"}
 );
 
 
-// RESET
+// RESET COLOR
 doc.setTextColor(0);
 
 
-// PRICE BOX
-doc.roundedRect(
-55,
-18,
-37,
-18,
-1,
-1
-);
+// AMOUNT BOX
+doc.roundedRect(55,18,37,18,1,1);
 
 doc.setFontSize(14);
 
@@ -96,15 +48,6 @@ doc.text(
 `INR ${amount}`,
 73,
 28,
-{align:"center"}
-);
-
-doc.setFontSize(4);
-
-doc.text(
-words,
-73,
-33,
 {align:"center"}
 );
 
@@ -122,7 +65,7 @@ doc.text(
 doc.line(3,45,97,45);
 
 
-// FIXED DIVIDER
+// DIVIDER
 doc.line(50,57,50,100);
 
 
@@ -138,25 +81,23 @@ doc.setTextColor(255);
 doc.text(
 "FROM (SELLER)",
 24,
-54.8,
+55,
 {align:"center"}
 );
 
 
 // TO LABEL
 doc.roundedRect(
-53,50,32,7,1,1,"F"
+56,50,30,7,1,1,"F"
 );
 
 doc.text(
 "TO (BUYER)",
-69,
-54.8,
+71,
+55,
 {align:"center"}
 );
 
-
-// RESET
 doc.setTextColor(0);
 
 
@@ -165,21 +106,32 @@ doc.setTextColor(0);
 doc.setFont("helvetica","bold");
 doc.setFontSize(12);
 
-doc.text("SUFIYAN",8,68);
+doc.text(
+"SUFIYAN",
+8,
+68
+);
 
 doc.setFont("helvetica","normal");
+
 doc.setFontSize(6);
 
-doc.text([
+doc.text(
+[
 "Anapparambil House",
 "Arakkal HMC Road",
 "Chalissery, Kerala - 679536"
-],8,77);
+],
+8,
+77
+);
 
 doc.setFont("helvetica","bold");
 
 doc.text("PIN : 679536",8,90);
+
 doc.text("PH : +91 8281088967",8,96);
+
 doc.text("Customer id : 1265200969",8,102);
 
 
@@ -187,16 +139,25 @@ doc.text("Customer id : 1265200969",8,102);
 
 doc.setFontSize(11);
 
-doc.text(customer,53,68);
+doc.text(
+customer,
+56,
+68
+);
 
 doc.setFont("helvetica","normal");
+
 doc.setFontSize(6);
 
-let buyerAddress=doc.splitTextToSize(address,24);
+let buyerAddress=
+doc.splitTextToSize(
+address,
+22
+);
 
 doc.text(
 buyerAddress,
-53,
+56,
 80
 );
 
@@ -204,14 +165,14 @@ doc.setFont("helvetica","bold");
 
 doc.text(
 `PIN : ${pin}`,
-53,
-94
+56,
+95
 );
 
 doc.text(
 `PH : ${phone}`,
-53,
-100
+56,
+101
 );
 
 
@@ -229,14 +190,28 @@ doc.rect(
 
 doc.setTextColor(255);
 
-doc.text("PRODUCT / ITEM",8,111);
-doc.text("QTY",72,111);
-doc.text("AMOUNT",86,111);
+doc.text(
+"PRODUCT / ITEM",
+8,
+111
+);
 
-doc.setTextColor(0);
+doc.text(
+"QTY",
+72,
+111
+);
+
+doc.text(
+"AMOUNT",
+85,
+111
+);
 
 
 // PRODUCT ROW
+
+doc.setTextColor(0);
 
 doc.setFontSize(10);
 
@@ -277,8 +252,6 @@ doc.text(
 140
 );
 
-doc.setFontSize(15);
-
 doc.text(
 `INR ${amount}`,
 95,
@@ -317,11 +290,12 @@ doc.text(
 149
 );
 
-doc.setFontSize(4.5);
-
 doc.setFont("helvetica","normal");
 
-doc.text([
+doc.setFontSize(4.5);
+
+doc.text(
+[
 "Name : Muhammed Sufiyan",
 "Mobile : 8281088967",
 "Address : Anapparambil House",
@@ -329,7 +303,10 @@ doc.text([
 "Pincode : 679536",
 "Area : Arakkal HMC Road",
 "City : Chalissery"
-],8,152);
+],
+8,
+152
+);
 
 doc.setFontSize(6);
 
