@@ -211,8 +211,9 @@ doc.text(
 );
 
 
-// BUYER
+// BUYER SECTION
 
+doc.setFont("helvetica","bold");
 doc.setFontSize(13);
 
 doc.text(
@@ -221,40 +222,36 @@ customer,
 68
 );
 
-doc.setFont(
-"helvetica",
-"normal"
-);
+doc.setFont("helvetica","normal");
+doc.setFontSize(7);
 
-doc.setFontSize(8);
-
-let buyerAddress=
-doc.splitTextToSize(
-`${address}, ${district}`,
-30
+// Split long address into multiple lines
+let buyerLines = doc.splitTextToSize(
+`${address}`,
+28
 );
 
 doc.text(
-buyerAddress,
+buyerLines,
 53,
 82
 );
 
-doc.setFont(
-"helvetica",
-"bold"
-);
+// Calculate dynamic position after address
+let nextY = 82 + (buyerLines.length * 4) + 4;
+
+doc.setFont("helvetica","bold");
 
 doc.text(
 `PIN : ${pin}`,
 53,
-92
+nextY
 );
 
 doc.text(
 `PH : ${phone}`,
 53,
-98
+nextY + 7
 );
 
 
