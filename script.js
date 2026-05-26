@@ -251,7 +251,7 @@ nextY
 doc.text(
 `PH : ${phone}`,
 53,
-nextY + 7
+110
 );
 
 
