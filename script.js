@@ -125,8 +125,8 @@ doc.setFont("helvetica","bold");
 FS(13);
 doc.text(data.customer,X(53),Y(68));
 
-doc.setFont("helvetica","normal");
-FS(6);
+doc.setFont("helvetica","bold");
+FS(8);
 
 let buyerLines = doc.splitTextToSize(data.address,28*s);
 buyerLines = buyerLines.slice(0,4);
